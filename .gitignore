@@ -1,0 +1,108 @@
+# =========================================
+# OS & Editor Files
+# =========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# =========================================
+# Node.js & React (Vite)
+# =========================================
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite / Build Output
+dist/
+build/
+*.local
+
+# Environment Variables (Vite Specific)
+# Commit .env and .env.example, but ignore local overrides and secrets
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+coverage/
+.nyc_output/
+
+# =========================================
+# Python
+# =========================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments (CRITICAL)
+# Ignores common names like venv, .venv, env, ENV
+venv/
+ENV/
+env/
+.venv/
+
+# IDE specific (Python)
+.idea/
+*.iml
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables (General Python)
+# If you use .env for Python backend secrets, ensure they are ignored
+# Note: Vite uses .env for public config, but Python backends often use it for secrets.
+# If this is a monorepo, be careful. Usually, backend .env should be ignored entirely
+# if it contains secrets, or use a specific name like .env.backend
+.env
+!.env.example
+
+# Database files (SQLite)
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+*.log   

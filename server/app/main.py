@@ -1,0 +1,31 @@
+from fastapi import FastAPI
+from sqlalchemy import text
+from app.api.v1 import semen_analysis
+from app.api.v1 import auth, patients, samples
+from app.core.database import engine
+
+app = FastAPI(
+    title="FertiLIS API",
+    version="1.0.0",
+)
+
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(patients.router, prefix="/api/v1")
+app.include_router(samples.router, prefix="/api/v1")
+app.include_router(semen_analysis.router, prefix="/api/v1")
+
+
+@app.get("/")
+def root():
+    return {"message": "FertiLIS Backend Running"}
+
+
+@app.get("/health")
+def health():
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+
+    return {
+        "database": "Connected",
+        "status": "OK",
+    }
