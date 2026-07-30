@@ -1,6 +1,6 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
-
+from pydantic import BaseModel, Field, ConfigDict
+from app.schemas.common import PaginationMeta
 
 class SampleCreate(BaseModel):
     patient_code: str
@@ -50,3 +50,9 @@ class SampleResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
+    
+class SampleListResponse(BaseModel):
+    items: list[SampleResponse]
+    pagination: PaginationMeta
+
+    model_config = ConfigDict(from_attributes=True)

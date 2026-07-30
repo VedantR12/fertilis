@@ -1,9 +1,14 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from fastapi import HTTPException
-
+from math import ceil
 from app.models.sample import Sample
 from app.models.patient import Patient
-from app.schemas.sample import SampleCreate, SampleUpdate
+from app.schemas.sample import (
+    SampleCreate,
+    SampleUpdate,
+    SampleListResponse,
+)
 from app.utils.sample_code import generate_sample_code
 
 
@@ -45,12 +50,52 @@ class SampleService:
         return sample
     
     @staticmethod
-    def get_samples(db: Session):
-        return (
+    def get_samples(
+        db: Session,
+        search: str | None = None,
+        page: int = 1,
+        limit: int = 20,
+    ) -> SampleListResponse:
+
+        query = (
             db.query(Sample)
+            .join(Patient)
+        )
+        
+        if search:
+            query = query.filter(
+                or_(
+                    Sample.sample_code.ilike(f"%{search}%"),
+                    Sample.sample_type.ilike(f"%{search}%"),
+                    Patient.patient_code.ilike(f"%{search}%"),
+                    Patient.first_name.ilike(f"%{search}%"),
+                    Patient.last_name.ilike(f"%{search}%"),
+                )
+            )
+        
+        total = query.count()
+        
+        samples = (
+            query
             .order_by(Sample.created_at.desc())
+            .offset((page - 1) * limit)
+            .limit(limit)
             .all()
         )
+
+        total_pages = ceil(total / limit) if total > 0 else 1
+
+        return {
+            "items": samples,
+            "pagination": {
+                "page": page,
+                "limit": limit,
+                "total": total,
+                "total_pages": total_pages,
+                "has_next": page < total_pages,
+                "has_previous": page > 1,
+            },
+        }
         
     @staticmethod
     def get_sample(
@@ -78,18 +123,18 @@ class SampleService:
         sample_code: str,
         data: SampleUpdate,
     ) -> Sample:
-    
+
         sample = SampleService.get_sample(
             db,
             sample_code,
         )
-    
+
         update_data = data.model_dump(exclude_unset=True)
-    
+
         for key, value in update_data.items():
             setattr(sample, key, value)
-    
+
         db.commit()
         db.refresh(sample)
-    
+
         return sample

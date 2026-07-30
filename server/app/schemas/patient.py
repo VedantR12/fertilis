@@ -1,6 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field
+from app.schemas.common import PaginationMeta
 
 
 class PatientCreate(BaseModel):
@@ -27,5 +28,11 @@ class PatientResponse(BaseModel):
     age: int
     phone: Optional[str]
     doctor: Optional[str]
+
+    model_config = ConfigDict(from_attributes=True)
+    
+class PatientListResponse(BaseModel):
+    items: list[PatientResponse]
+    pagination: PaginationMeta
 
     model_config = ConfigDict(from_attributes=True)

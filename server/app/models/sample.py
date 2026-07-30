@@ -9,9 +9,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.models.patient import Patient
-    
-if TYPE_CHECKING:
     from app.models.semen_analysis import SemenAnalysis
+    from app.models.morphology import Morphology
+    from app.models.dfi import DFI
 
 class Sample(Base, TimestampMixin):
     __tablename__ = "samples"
@@ -57,6 +57,20 @@ class Sample(Base, TimestampMixin):
     
     analysis: Mapped["SemenAnalysis"] = relationship(
     "SemenAnalysis",
+    back_populates="sample",
+    cascade="all, delete-orphan",
+    uselist=False,
+    )
+    
+    morphology: Mapped["Morphology"] = relationship(
+    "Morphology",
+    back_populates="sample",
+    cascade="all, delete-orphan",
+    uselist=False,
+    )
+    
+    dfi: Mapped["DFI"] = relationship(
+    "DFI",
     back_populates="sample",
     cascade="all, delete-orphan",
     uselist=False,
