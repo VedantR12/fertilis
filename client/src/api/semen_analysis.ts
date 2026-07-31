@@ -27,7 +27,7 @@ export async function createSemenAnalysis(
 
 export async function updateSemenAnalysis(
   sampleCode: string,
-  data: Partial<SemenAnalysisFormData>
+  data: SemenAnalysisFormData
 ): Promise<SemenAnalysis> {
   const response = await api.patch(
     `/semen-analyses/${sampleCode}`,

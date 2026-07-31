@@ -40,3 +40,13 @@ export async function getPatientSamples(
 
   return response.data;
 }
+
+export async function getSampleTests(
+  sampleCode: string
+) {
+  const response = await api.get(
+    `/samples/${sampleCode}/tests`
+  );
+
+  return response.data;
+}

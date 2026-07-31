@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-
+import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -13,39 +13,67 @@ import {
 
 import {
     semenAnalysisSchema,
-    type SemenAnalysis,
     type SemenAnalysisFormData,
 } from "@/lib/schemas/semen_analysis";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import GeneralSection from "@/components/semen_analysis/GeneralSection";
+import MacroscopicSection from "@/components/semen_analysis/MacroscopicSection";
+import MicroscopicSection from "@/components/semen_analysis/MicroscopicSection";
+import MotilityMorphologySection from "@/components/semen_analysis/MotilityMorphologySection";
+import CommentsSection from "@/components/semen_analysis/CommentsSection";
+
 
 export default function SemenAnalysis() {
     const { sampleCode } = useParams();
-
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [analysisExists, setAnalysisExists] =
         useState(false);
 
     const {
+        control,
         register,
         handleSubmit,
         reset,
-        formState: { errors, isSubmitting },
+        watch,
+        formState: {
+            errors,
+        },
     } = useForm<SemenAnalysisFormData>({
         resolver: zodResolver(semenAnalysisSchema),
+
+        mode: "onSubmit",
+        reValidateMode: "onSubmit",
+
         defaultValues: {
             sample_code: sampleCode ?? "",
+
+            criteria: "",
+
             volume_ml: 0,
-            ph: 7.2,
-            concentration_million_ml: 0,
+            appearance: "",
+            ph: 0.0,
+            viscosity: "",
+            liquefaction_minutes: 0,
+
+            sperm_concentration_million_ml: 0,
+            wbc_concentration_million_ml: 0,
+            pus_cells: "",
+            debris: "",
+            agglutination: "",
+
             total_motility_percent: 0,
             progressive_motility_percent: 0,
-            morphology_percent: 0,
-            vitality_percent: 0,
-            wbc_million_ml: 0,
-            liquefaction_minutes: 0,
-            viscosity: "",
-            appearance: "",
+            rapid_progressive_percent: 0,
+            slow_progressive_percent: 0,
+            non_progressive_percent: 0,
+            immotile_percent: 100,
+
+            morphology_normal_percent: 0,
+            morphology_abnormal_percent: 100,
+
+            comments: "",
         },
     });
 
@@ -55,11 +83,16 @@ export default function SemenAnalysis() {
 
             try {
                 const data = await getSemenAnalysis(sampleCode);
-
                 reset(data);
 
                 setAnalysisExists(true);
             } catch (error) {
+                console.log("Error:", error);
+
+                if (axios.isAxiosError(error)) {
+                    console.log("Status:", error.response?.status);
+                }
+
                 if (
                     axios.isAxiosError(error) &&
                     error.response?.status === 404
@@ -67,18 +100,33 @@ export default function SemenAnalysis() {
                     setAnalysisExists(false);
 
                     reset({
-                        sample_code: sampleCode,
+                        sample_code: sampleCode ?? "",
+
+                        criteria: "",
+
                         volume_ml: 0,
+                        appearance: "",
                         ph: 7.2,
-                        concentration_million_ml: 0,
+                        viscosity: "",
+                        liquefaction_minutes: 0,
+
+                        sperm_concentration_million_ml: 0,
+                        wbc_concentration_million_ml: 0,
+                        pus_cells: "",
+                        debris: "",
+                        agglutination: "",
+
                         total_motility_percent: 0,
                         progressive_motility_percent: 0,
-                        morphology_percent: 0,
-                        vitality_percent: 0,
-                        wbc_million_ml: 0,
-                        liquefaction_minutes: 0,
-                        viscosity: "",
-                        appearance: "",
+                        rapid_progressive_percent: 0,
+                        slow_progressive_percent: 0,
+                        non_progressive_percent: 0,
+                        immotile_percent: 100,
+
+                        morphology_normal_percent: 0,
+                        morphology_abnormal_percent: 100,
+
+                        comments: "",
                     });
                 } else {
                     console.error(error);
@@ -91,9 +139,8 @@ export default function SemenAnalysis() {
         loadAnalysis();
     }, [sampleCode, reset]);
 
-    async function onSubmit(
-        data: SemenAnalysisFormData
-    ) {
+    async function onSubmit(data: SemenAnalysisFormData) {
+
         try {
             if (analysisExists) {
                 await updateSemenAnalysis(
@@ -105,10 +152,23 @@ export default function SemenAnalysis() {
                 setAnalysisExists(true);
             }
 
-            alert("Saved successfully.");
+            toast.success("Report saved successfully.", {
+                action: {
+                    label: "View Report",
+                    onClick: () =>
+                        navigate(`/admin/samples/${sampleCode}/report`),
+                },
+            });
+
         } catch (error) {
-            console.error(error);
-            alert("Failed to save.");
+            if (axios.isAxiosError(error)) {
+                console.log("STATUS:", error.response?.status);
+                console.log("DATA:", error.response?.data);
+
+                toast.error("Failed to save report.");
+            } else {
+                console.error(error);
+            }
         }
     }
 
@@ -125,16 +185,56 @@ export default function SemenAnalysis() {
                 Semen Analysis
             </h1>
 
-            <p>
-                Form will go here.
-            </p>
 
-            <Button
-                type="submit"
-                disabled={isSubmitting}
-            >
-                {analysisExists ? "Update" : "Save"}
-            </Button>
+
+            <div className="space-y-8">
+
+                <GeneralSection
+                    control={control}
+                    errors={errors}
+                />
+
+                <MacroscopicSection
+                    control={control}
+                    register={register}
+                    errors={errors}
+                />
+
+                <MicroscopicSection
+                    control={control}
+                    register={register}
+                    errors={errors}
+                />
+
+                <MotilityMorphologySection
+                    register={register}
+                    errors={errors}
+                />
+
+                <CommentsSection
+                    register={register}
+                    errors={errors}
+                />
+
+            </div>
+
+            <div className="flex gap-3">
+                <Button type="submit">
+                    Save Report
+                </Button>
+
+                {analysisExists && (
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={() =>
+                            navigate(`/admin/samples/${sampleCode}/report`)
+                        }
+                    >
+                        View Report
+                    </Button>
+                )}
+            </div>
         </form>
     );
 }

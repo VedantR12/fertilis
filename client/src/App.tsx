@@ -16,6 +16,8 @@ import EditPatient from "@/pages/patients/EditPatient";
 import RegisterSample from "@/pages/samples/RegisterSample";
 import SampleDetails from "@/pages/samples/SampleDetails";
 import SemenAnalysis from "@/pages/semen_analysis/SemenAnalysis";
+import SemenAnalysisReport from "@/pages/semen_analysis/SemenAnalysisReport";
+import Tests from "./pages/admin/Tests";
 
 function App() {
   const { token, restoreUser, logout, setLoading } = useAuthStore();
@@ -60,13 +62,17 @@ function App() {
           <Route path="/admin/patients" element={<Patients />} />
           <Route path="/admin/patients/new" element={<NewPatient />} />
           <Route path="/admin/samples" element={<Samples />} />
-          <Route path="/admin/reports" element={<Reports />} />
+          <Route path="/admin/tests" element={<Tests />} />
+          <Route path="/admin/reports" element={<Patients />} />
+          <Route path="/admin/reports/:patientCode" element={<PatientDetails />} />
+          <Route path="/admin/reports/:patientCode/:sampleCode" element={<SampleDetails />} />
           <Route path="/admin/settings" element={<Settings />} />
           <Route path="/admin/patients/:patientCode" element={<PatientDetails />} />
           <Route path="/admin/patients/:patientCode/edit" element={<EditPatient />} />
           <Route path="/admin/patients/:patientCode/samples/new" element={<RegisterSample />} />
           <Route path="/admin/samples/:sampleCode" element={<SampleDetails />} />
           <Route path="/admin/samples/:sampleCode/analysis" element={<SemenAnalysis />} />
+          <Route path="/admin/samples/:sampleCode/report" element={<SemenAnalysisReport />} />
         </Route>
 
         {/* We'll add these when those modules exist */}

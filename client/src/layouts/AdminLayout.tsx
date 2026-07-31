@@ -3,23 +3,23 @@ import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 
 const AdminLayout = () => {
-  return (
-    <div className="flex">
+    return (
+        <div>
 
-      <Sidebar />
+            <Sidebar />
 
-      <div className="flex-1">
+            <div className="ml-64">
 
-        <Navbar />
+                <Navbar />
 
-        <main className="p-6 bg-gray-50 min-h-screen">
-          <Outlet />
-        </main>
+                <main className="min-h-screen bg-gray-50 p-6">
+                    <Outlet />
+                </main>
 
-      </div>
+            </div>
 
-    </div>
-  );
+        </div>
+    );
 };
 
 export default AdminLayout;

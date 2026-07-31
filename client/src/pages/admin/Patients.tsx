@@ -1,4 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+    useSearchParams,
+    useLocation,
+} from "react-router-dom";
 import { Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getPatients } from "@/services/patient";
@@ -20,6 +25,17 @@ export default function Patients() {
     });
     const [page, setPage] = useState(1);
     const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const isSelectionMode =
+        searchParams.get("mode") === "select";
+
+    const isReportsMode =
+        location.pathname === "/admin/reports";
+
+    const selectedTest =
+        searchParams.get("test");
 
     const fetchPatients = async (
         searchTerm = "",
@@ -58,20 +74,35 @@ export default function Patients() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold">
-                        Patients
+                        {isSelectionMode
+                            ? "Select Patient"
+                            : isReportsMode
+                                ? "Patient Reports"
+                                : "Patients"}
                     </h1>
 
                     <p className="text-muted-foreground">
-                        Manage patient records.
+                        {isSelectionMode
+                            ? "Choose an existing patient or register a new patient to continue."
+                            : isReportsMode
+                                ? "Select a patient to view available reports."
+                                : "Manage patient records."}
                     </p>
                 </div>
 
-                <Button asChild>
-                    <Link to="/admin/patients/new">
-                        <Plus className="mr-2 h-4 w-4" />
-                        New Patient
-                    </Link>
-                </Button>
+                {!isReportsMode && (
+                    <Button asChild>
+                        <Link
+                            to={
+                                isSelectionMode
+                                    ? `/admin/patients/new?mode=select&test=${selectedTest}`
+                                    : "/admin/patients/new"
+                            }
+                        >
+                            {isSelectionMode ? "Register Patient" : "New Patient"}
+                        </Link>
+                    </Button>
+                )}
             </div>
 
             {/* Search */}
@@ -135,7 +166,29 @@ export default function Patients() {
                             patients.map((patient) => (
                                 <tr
                                     key={patient.patient_code}
-                                    onClick={() => navigate(`/admin/patients/${patient.patient_code}`)}
+                                    onClick={() => {
+
+                                        if (isSelectionMode) {
+
+                                            navigate(
+                                                `/admin/patients/${patient.patient_code}?mode=select&test=${selectedTest}`
+                                            );
+
+                                        } else if (isReportsMode) {
+
+                                            navigate(
+                                                `/admin/reports/${patient.patient_code}`
+                                            );
+
+                                        } else {
+
+                                            navigate(
+                                                `/admin/patients/${patient.patient_code}`
+                                            );
+
+                                        }
+
+                                    }}
                                     className="border-b hover:bg-gray-50 cursor-pointer"
                                 >
                                     <td className="px-4 py-3">
@@ -159,11 +212,36 @@ export default function Patients() {
                                             variant="outline"
                                             size="sm"
                                             onClick={(e) => {
+
                                                 e.stopPropagation();
-                                                navigate(`/admin/patients/${patient.patient_code}`);
+
+                                                if (isSelectionMode) {
+
+                                                    navigate(
+                                                        `/admin/patients/${patient.patient_code}?mode=select&test=${selectedTest}`
+                                                    );
+
+                                                } else if (isReportsMode) {
+
+                                                    navigate(
+                                                        `/admin/reports/${patient.patient_code}`
+                                                    );
+
+                                                } else {
+
+                                                    navigate(
+                                                        `/admin/patients/${patient.patient_code}`
+                                                    );
+
+                                                }
+
                                             }}
                                         >
-                                            View
+                                            {isSelectionMode
+                                                ? "Select"
+                                                : isReportsMode
+                                                    ? "Reports"
+                                                    : "View"}
                                         </Button>
                                     </td>
                                 </tr>

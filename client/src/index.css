@@ -127,3 +127,66 @@
     @apply font-sans;
     }
 }
+
+@media print {
+
+  body {
+    background: white !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 6mm;
+  }
+
+  nav,
+  aside,
+  header,
+  footer {
+    display: none !important;
+  }
+
+  button {
+    display: none !important;
+  }
+
+  .shadow,
+  .shadow-lg,
+  .shadow-xl {
+    box-shadow: none !important;
+  }
+
+  .border-gray-300 {
+    border: none !important;
+  }
+
+}
+
+@media print {
+
+  table {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+}
+
+@media print {
+
+  h2,
+  h3 {
+      page-break-after: avoid;
+      break-after: avoid;
+  }
+
+  table {
+      page-break-before: avoid;
+      break-before: avoid;
+  }
+
+}

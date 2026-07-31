@@ -23,15 +23,15 @@ const menuItems = [
     path: "/admin/patients",
   },
   {
-    title: "Samples",
+    title: "Tests",
     icon: FlaskConical,
-    path: "/admin/samples",
+    path: "/admin/tests",
   },
   {
-    title: "Reports",
-    icon: FileText,
-    path: "/admin/reports",
-  },
+  title: "Reports",
+  icon: FileText,
+  path: "/admin/reports",
+},
   {
     title: "Settings",
     icon: Settings,
@@ -49,7 +49,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r bg-white">
+    <aside className="fixed left-0 top-0 z-50 flex h-screen w-64 flex-col border-r bg-white">
 
       <div className="border-b p-6">
         <h1 className="text-2xl font-bold text-blue-600">

@@ -11,6 +11,8 @@ import {
     FieldError,
 } from "@/components/ui/field";
 
+import { z } from "zod";
+
 import {
     patientSchema,
     type PatientFormData,
@@ -27,7 +29,11 @@ export function PatientForm({
     onSubmit,
     loading = false,
 }: PatientFormProps) {
-    const form = useForm<PatientFormData>({
+    const form = useForm<
+        z.input<typeof patientSchema>,
+        unknown,
+        PatientFormData
+    >({
         resolver: zodResolver(patientSchema),
         defaultValues: defaultValues ?? {
             first_name: "",
@@ -106,17 +112,13 @@ export function PatientForm({
                 </FieldLabel>
 
                 <FieldContent>
-                    <Controller
-                        control={form.control}
-                        name="age"
-                        render={({ field }) => (
-                            <Input
-                                id="age"
-                                type="number"
-                                placeholder="Age"
-                                {...field}
-                            />
-                        )}
+                    <Input
+                        id="age"
+                        type="number"
+                        placeholder="Age"
+                        {...form.register("age", {
+                            valueAsNumber: true,
+                        })}
                     />
 
                     <FieldError>

@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field, computed_field, model_validator
-
+from pydantic import BaseModel, Field, computed_field
+from datetime import datetime
 
 class SemenAnalysisBase(BaseModel):
     
@@ -37,42 +37,6 @@ class SemenAnalysisBase(BaseModel):
 
     comments: str | None = None
 
-    @model_validator(mode="after")
-    def validate_percentages(self):
-        progressive = (
-            self.rapid_progressive_percent
-            + self.slow_progressive_percent
-        )
-
-        if abs(progressive - self.progressive_motility_percent) > 0.01:
-            raise ValueError(
-                "Rapid + Slow Progressive must equal Progressive Motility."
-            )
-
-        motility = (
-            self.rapid_progressive_percent
-            + self.slow_progressive_percent
-            + self.non_progressive_percent
-            + self.immotile_percent
-        )
-
-        if abs(motility - 100) > 0.01:
-            raise ValueError(
-                "Rapid + Slow + Non Progressive + Immotile must equal 100."
-            )
-
-        morphology = (
-            self.morphology_normal_percent
-            + self.morphology_abnormal_percent
-        )
-
-        if abs(morphology - 100) > 0.01:
-            raise ValueError(
-                "Normal + Abnormal morphology must equal 100."
-            )
-
-        return self
-
 
 class SemenAnalysisCreate(SemenAnalysisBase):
     sample_code: str
@@ -85,6 +49,7 @@ class SemenAnalysisUpdate(SemenAnalysisBase):
 class SemenAnalysisResponse(SemenAnalysisBase):
     id: int
     sample_code: str
+    created_at: datetime
 
     @computed_field
     @property

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 from app.api.v1 import semen_analysis, morphology, dfi
-from app.api.v1 import auth, patients, samples
+from app.api.v1 import auth, patients, samples, dashboard
 from app.core.database import engine
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -26,6 +26,7 @@ app.include_router(samples.router, prefix="/api/v1")
 app.include_router(semen_analysis.router, prefix="/api/v1")
 app.include_router(morphology.router, prefix="/api/v1")
 app.include_router(dfi.router, prefix="/api/v1")
+app.include_router(dashboard.router, prefix="/api/v1")
 
 
 @app.get("/")

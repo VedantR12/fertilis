@@ -75,6 +75,17 @@ def get_sample(
         db,
         sample_code,
     )
+    
+@router.get("/{sample_code}/tests")
+def get_sample_tests(
+    sample_code: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    return SampleService.get_sample_tests(
+        db,
+        sample_code,
+    )
 
 
 @router.patch(

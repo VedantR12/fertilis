@@ -1,16 +1,30 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { getSample } from "@/api/samples";
+import {
+    getSample,
+    getSampleTests,
+} from "@/api/samples";
 import type { Sample } from "@/lib/schemas/sample";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+    useNavigate,
+    useParams,
+    useSearchParams,
+    useLocation,
+} from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card";
 
 export default function SampleDetails() {
     const { sampleCode } = useParams();
 
     const [sample, setSample] = useState<Sample | null>(null);
+    const [tests, setTests] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    const isReportsMode =
+    location.pathname.startsWith("/admin/reports");
 
     useEffect(() => {
         async function loadSample() {
@@ -18,7 +32,13 @@ export default function SampleDetails() {
 
             try {
                 const data = await getSample(sampleCode);
+
                 setSample(data);
+
+                const testData =
+                    await getSampleTests(sampleCode);
+
+                setTests(testData.tests);
             } finally {
                 setLoading(false);
             }
@@ -42,131 +62,141 @@ export default function SampleDetails() {
             </h1>
 
             <Card>
+
                 <CardHeader>
-                    <CardTitle>{sample.sample_code}</CardTitle>
-                </CardHeader>
 
-                <CardContent className="grid grid-cols-2 gap-4">
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Patient Code
-                        </p>
-                        <p>{sample.patient_code}</p>
-                    </div>
+                    <CardTitle>
 
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Sample Type
-                        </p>
-                        <p>{sample.sample_type}</p>
-                    </div>
+                        {isReportsMode
+                            ? "Available Reports"
+                            : "Laboratory Tests"}
 
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Collection Date & Time
-                        </p>
-                        <p>
-                            {new Date(
-                                sample.collection_datetime
-                            ).toLocaleString()}
-                        </p>
-                    </div>
+                    </CardTitle>
 
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Abstinence Days
-                        </p>
-                        <p>{sample.abstinence_days}</p>
-                    </div>
-
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Status
-                        </p>
-                        <p>{sample.status}</p>
-                    </div>
-
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Collection Method
-                        </p>
-                        <p>{sample.collection_method || "-"}</p>
-                    </div>
-
-                    <div>
-                        <p className="text-sm text-muted-foreground">
-                            Collection Place
-                        </p>
-                        <p>{sample.collection_place || "-"}</p>
-                    </div>
-
-                    <div className="col-span-2">
-                        <p className="text-sm text-muted-foreground">
-                            Remarks
-                        </p>
-                        <p>{sample.remarks || "-"}</p>
-                    </div>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Laboratory Tests</CardTitle>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                    {/* Semen Analysis */}
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                        <div>
-                            <h3 className="font-medium">
-                                Semen Analysis
-                            </h3>
-                        </div>
 
-                        <Button
-                            size="sm"
-                            onClick={() =>
-                                navigate(
-                                    `/admin/samples/${sample.sample_code}/analysis`
-                                )
-                            }
+                    {tests.map((test) => (
+
+                        <div
+                            key={test.id}
+                            className="flex items-center justify-between rounded-lg border p-4"
                         >
-                        </Button>
-                    </div>
 
-                    {/* Morphology */}
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                        <div>
-                            <h3 className="font-medium">
-                                Morphology
-                            </h3>
+                            <div>
 
-                            <p className="text-sm text-muted-foreground">
-                                Status: Not Started
-                            </p>
+                                <h3 className="font-medium">
+                                    {test.name}
+                                </h3>
+
+                                <p className="text-sm text-muted-foreground">
+
+                                    {test.performed
+                                        ? "Completed"
+                                        : "Not Performed"}
+
+                                </p>
+
+                            </div>
+
+                            {isReportsMode ? (
+
+                                test.performed ? (
+
+                                    <Button
+                                        size="sm"
+                                        onClick={() => {
+
+                                            switch (test.id) {
+
+                                                case "semen-analysis":
+
+                                                    navigate(
+                                                        `/admin/samples/${sample.sample_code}/report`
+                                                    );
+
+                                                    break;
+
+                                                case "morphology":
+
+                                                    // We'll create this later
+                                                    break;
+
+                                                case "dfi":
+
+                                                    // We'll create this later
+                                                    break;
+
+                                            }
+
+                                        }}
+                                    >
+                                        Preview Report
+                                    </Button>
+
+                                ) : (
+
+                                    <Button
+                                        size="sm"
+                                        disabled
+                                    >
+                                        Not Performed
+                                    </Button>
+
+                                )
+
+                            ) : (
+
+                                <Button
+                                    size="sm"
+                                    onClick={() => {
+
+                                        switch (test.id) {
+
+                                            case "semen-analysis":
+
+                                                navigate(
+                                                    `/admin/samples/${sample.sample_code}/analysis`
+                                                );
+
+                                                break;
+
+                                            case "morphology":
+
+                                                navigate(
+                                                    `/admin/samples/${sample.sample_code}/morphology`
+                                                );
+
+                                                break;
+
+                                            case "dfi":
+
+                                                navigate(
+                                                    `/admin/samples/${sample.sample_code}/dfi`
+                                                );
+
+                                                break;
+
+                                        }
+
+                                    }}
+                                >
+
+                                    {test.performed
+                                        ? "Continue"
+                                        : "Start Test"}
+
+                                </Button>
+
+                            )}
+
                         </div>
 
-                        <Button size="sm">
-                            Start Test
-                        </Button>
-                    </div>
+                    ))}
 
-                    {/* DNA Fragmentation Index */}
-                    <div className="flex items-center justify-between rounded-lg border p-4">
-                        <div>
-                            <h3 className="font-medium">
-                                DNA Fragmentation Index
-                            </h3>
-
-                            <p className="text-sm text-muted-foreground">
-                                Status: Not Started
-                            </p>
-                        </div>
-
-                        <Button size="sm">
-                            Start Test
-                        </Button>
-                    </div>
                 </CardContent>
+
             </Card>
         </div>
     );

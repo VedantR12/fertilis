@@ -5,6 +5,9 @@ from fastapi import HTTPException
 from math import ceil
 from app.models.sample import Sample
 from app.models.patient import Patient
+from app.models.semen_analysis import SemenAnalysis
+from app.models.morphology import Morphology
+from app.models.dfi import DFI
 from app.schemas.sample import (
     SampleCreate,
     SampleUpdate,
@@ -172,22 +175,75 @@ class SampleService:
         db: Session,
         patient_code: str,
     ) -> list[Sample]:
-    
+
         patient = (
             db.query(Patient)
             .filter(Patient.patient_code == patient_code)
             .first()
         )
-    
+
         if not patient:
             raise HTTPException(
                 status_code=404,
                 detail="Patient not found",
             )
-    
+
         return (
             db.query(Sample)
             .filter(Sample.patient_id == patient.id)
             .order_by(Sample.collection_datetime.desc())
             .all()
         )
+    
+    @staticmethod
+    def get_sample_tests(
+        db: Session,
+        sample_code: str,
+    ):
+
+        sample = SampleService.get_sample(
+            db,
+            sample_code,
+        )
+
+        semen_exists = (
+            db.query(SemenAnalysis)
+            .filter(SemenAnalysis.sample_id == sample.id)
+            .first()
+            is not None
+        )
+
+        morphology_exists = (
+            db.query(Morphology)
+            .filter(Morphology.sample_id == sample.id)
+            .first()
+            is not None
+        )
+
+        dfi_exists = (
+            db.query(DFI)
+            .filter(DFI.sample_id == sample.id)
+            .first()
+            is not None
+        )
+
+        return {
+            "sample_code": sample.sample_code,
+            "tests": [
+                {
+                    "id": "semen-analysis",
+                    "name": "Semen Analysis",
+                    "performed": semen_exists,
+                },
+                {
+                    "id": "morphology",
+                    "name": "Morphology",
+                    "performed": morphology_exists,
+                },
+                {
+                    "id": "dfi",
+                    "name": "DNA Fragmentation Index",
+                    "performed": dfi_exists,
+                },
+            ],
+        }

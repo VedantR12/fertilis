@@ -1,0 +1,599 @@
+import {
+    Document,
+    Page,
+    Text,
+    View,
+    StyleSheet,
+} from "@react-pdf/renderer";
+
+import type { Sample } from "@/lib/schemas/sample";
+import type { Patient } from "@/lib/schemas/patient";
+import type { SemenAnalysis } from "@/lib/schemas/semen_analysis";
+import PDFTable from "./PDFTable";
+import MotilityPieChart from "@/components/pdf/MotilityPieChart";
+
+interface Props {
+    sample: Sample;
+    patient: Patient;
+    analysis: SemenAnalysis;
+}
+
+const styles = StyleSheet.create({
+    pageNumber: {
+        position: "absolute",
+        bottom: 8,
+        right: 30,
+        fontSize: 8,
+        color: "grey",
+    },
+
+    footer: {
+        position: "absolute",
+        bottom: 20,
+        left: 30,
+        right: 30,
+
+        borderTopWidth: 0.5,
+        borderTopColor: "#999",
+
+        paddingTop: 6,
+
+        alignItems: "center",
+    },
+
+    footerTitle: {
+        fontSize: 9,
+        fontWeight: "bold",
+    },
+
+    footerText: {
+        fontSize: 7,
+        color: "#666",
+        marginTop: 2,
+    },
+
+    tableSpacing: {
+        marginBottom: 16,
+    },
+
+    page: {
+        padding: 30,
+        fontSize: 10,
+        fontFamily: "Helvetica",
+    },
+
+    title: {
+        fontSize: 18,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 20,
+    },
+
+    sectionTitle: {
+        fontSize: 13,
+        fontWeight: "bold",
+        marginTop: 12,
+        marginBottom: 8,
+        borderBottomWidth: 1,
+        paddingBottom: 4,
+    },
+
+    table: {
+        width: "100%",
+    },
+
+    row: {
+        flexDirection: "row",
+        marginBottom: 6,
+    },
+
+    label: {
+        width: "25%",
+        fontWeight: "bold",
+    },
+
+    value: {
+        width: "25%",
+    },
+    cardsContainer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        marginTop: 6,
+        marginBottom: 18,
+    },
+
+    card: {
+        width: "48%",
+        borderWidth: 1,
+        borderColor: "#000",
+        paddingVertical: 8,
+        paddingHorizontal: 10,
+        marginBottom: 8,
+    },
+
+    cardTitle: {
+        fontSize: 10,
+        color: "#444",
+        marginBottom: 6,
+    },
+
+    cardValue: {
+        fontSize: 12,
+        fontWeight: "normal",
+        textAlign: "center",
+    },
+
+    cardUnit: {
+        fontSize: 8,
+        color: "#666",
+        textAlign: "center",
+        marginTop: 2,
+    },
+
+    watermark: {
+        position: "absolute",
+        top: 320,
+        left: 80,
+
+        fontSize: 80,
+        fontWeight: "bold",
+
+        color: "#eeeeee",
+
+        transform: "rotate(-35deg)",
+    },
+});
+
+export default function SemenAnalysisPDF({
+    sample,
+    patient,
+    analysis,
+}: Props) {
+
+    const reportDate = new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    }).format(new Date(analysis.created_at));
+
+    return (
+        <Document>
+            <Page size="A4" style={styles.page}>
+
+                <Text
+                    fixed
+                    style={styles.watermark}
+                >
+                    FERTILIS
+                </Text>
+
+
+                <Text style={styles.title}>
+                    SEMEN ANALYSIS REPORT
+                </Text>
+
+                <Text
+                    style={{
+                        textAlign: "right",
+                        marginBottom: 18,
+                        fontSize: 10,
+                    }}
+                >
+                    Report Date: {reportDate}
+                </Text>
+
+                <Text style={styles.sectionTitle}>
+                    Patient Information
+                </Text>
+
+                <View style={styles.table}>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Patient Name</Text>
+                        <Text style={styles.value}>
+                            {patient.first_name} {patient.last_name}
+                        </Text>
+
+                        <Text style={styles.label}>Patient Code</Text>
+                        <Text style={styles.value}>
+                            {patient.patient_code}
+                        </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Age</Text>
+                        <Text style={styles.value}>
+                            {patient.age} Years
+                        </Text>
+
+                        <Text style={styles.label}>Phone</Text>
+                        <Text style={styles.value}>
+                            {patient.phone}
+                        </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Doctor</Text>
+                        <Text style={styles.value}>
+                            {patient.doctor}
+                        </Text>
+                    </View>
+
+                </View>
+
+                <Text style={styles.sectionTitle}>
+                    Sample Information
+                </Text>
+
+                <View style={[styles.table, styles.tableSpacing]}>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Sample Code</Text>
+                        <Text style={styles.value}>
+                            {sample.sample_code}
+                        </Text>
+
+                        <Text style={styles.label}>Sample Type</Text>
+                        <Text style={styles.value}>
+                            {sample.sample_type}
+                        </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Collection Date</Text>
+                        <Text style={styles.value}>
+                            {sample.collection_datetime
+                                ? new Date(sample.collection_datetime).toLocaleDateString()
+                                : "-"}
+                        </Text>
+
+                        <Text style={styles.label}>Collection Time</Text>
+                        <Text style={styles.value}>
+                            {sample.collection_datetime
+                                ? new Date(sample.collection_datetime).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })
+                                : "-"}
+                        </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Abstinence</Text>
+                        <Text style={styles.value}>
+                            {sample.abstinence_days} Days
+                        </Text>
+
+                        <Text style={styles.label}>Status</Text>
+                        <Text style={styles.value}>
+                            {sample.status}
+                        </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Collection Method</Text>
+                        <Text style={styles.value}>
+                            {sample.collection_method}
+                        </Text>
+
+                        <Text style={styles.label}>Collection Place</Text>
+                        <Text style={styles.value}>
+                            {sample.collection_place}
+                        </Text>
+                    </View>
+
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Remarks</Text>
+                        <Text style={{ flex: 1 }}>
+                            {sample.remarks || "-"}
+                        </Text>
+                    </View>
+
+                </View>
+
+                <Text style={styles.sectionTitle}>
+                    Results
+                </Text>
+
+                <PDFTable
+                    title="Macroscopic Examination"
+                    rows={[
+                        {
+                            parameter: "Volume",
+                            result: analysis.volume_ml,
+                            unit: "ml",
+                            reference: ">= 1.4",
+                        },
+                        {
+                            parameter: "Appearance",
+                            result: analysis.appearance,
+                            unit: "-",
+                            reference: "-",
+                        },
+                        {
+                            parameter: "pH",
+                            result: analysis.ph,
+                            unit: "-",
+                            reference: "7.2–8.0",
+                        },
+                        {
+                            parameter: "Viscosity",
+                            result: analysis.viscosity,
+                            unit: "-",
+                            reference: "-",
+                        },
+                        {
+                            parameter: "Liquefaction Time",
+                            result: analysis.liquefaction_minutes,
+                            unit: "min",
+                            reference: "<= 60",
+                        },
+                    ]}
+                />
+
+                <PDFTable
+                    title="Microscopic Examination"
+                    rows={[
+                        {
+                            parameter: "Sperm Concentration",
+                            result: analysis.sperm_concentration_million_ml,
+                            unit: "million/ml",
+                            reference: ">= 16",
+                        },
+                        {
+                            parameter: "WBC Concentration",
+                            result: analysis.wbc_concentration_million_ml,
+                            unit: "million/ml",
+                            reference: "< 1",
+                        },
+                        {
+                            parameter: "Pus Cells",
+                            result: analysis.pus_cells,
+                            unit: "-",
+                            reference: "Nil/Few",
+                        },
+                        {
+                            parameter: "Debris",
+                            result: analysis.debris,
+                            unit: "-",
+                            reference: "Absent/Mild",
+                        },
+                        {
+                            parameter: "Agglutination",
+                            result: analysis.agglutination,
+                            unit: "-",
+                            reference: "Absent",
+                        },
+                    ]}
+                />
+
+                <View
+                    wrap={false}
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "stretch",
+                        marginBottom: 18,
+                    }}
+                >
+
+                    <View
+                        style={{
+                            width: "65%",
+                            paddingRight: 6,
+                        }}
+                    >
+                        <PDFTable
+                            title="Motility"
+                            rows={[
+                                {
+                                    parameter: "Total Motility",
+                                    result: analysis.total_motility_percent,
+                                    unit: "%",
+                                    reference: ">= 42",
+                                },
+                                {
+                                    parameter: "Progressive Motility",
+                                    result: analysis.progressive_motility_percent,
+                                    unit: "%",
+                                    reference: ">= 30",
+                                },
+                                {
+                                    parameter: "Rapid Progressive",
+                                    result: analysis.rapid_progressive_percent,
+                                    unit: "%",
+                                    reference: "-",
+                                },
+                                {
+                                    parameter: "Slow Progressive",
+                                    result: analysis.slow_progressive_percent,
+                                    unit: "%",
+                                    reference: "-",
+                                },
+                                {
+                                    parameter: "Non Progressive",
+                                    result: analysis.non_progressive_percent,
+                                    unit: "%",
+                                    reference: "<=1",
+                                },
+                                {
+                                    parameter: "Immotile",
+                                    result: analysis.immotile_percent,
+                                    unit: "%",
+                                    reference: "<=20",
+                                },
+                            ]}
+                        />
+                    </View>
+                    <View
+                        style={{
+                            width: "35%",
+                            paddingLeft: 6,
+                        }}
+                    >
+                        <MotilityPieChart
+                            rapid={analysis.rapid_progressive_percent}
+                            slow={analysis.slow_progressive_percent}
+                            nonProgressive={analysis.non_progressive_percent}
+                            immotile={analysis.immotile_percent}
+                        />
+                    </View>
+                </View>
+
+                <PDFTable
+                    title="Morphology"
+                    rows={[
+                        {
+                            parameter: "Normal Forms",
+                            result: analysis.morphology_normal_percent,
+                            unit: "%",
+                            reference: ">= 4",
+                        },
+                        {
+
+                            parameter: "Abnormal Forms",
+                            result: analysis.morphology_abnormal_percent,
+                            unit: "%",
+                            reference: "< 96",
+                        },
+                    ]}
+                />
+
+                <Text style={styles.sectionTitle}>
+                    Totals per Ejaculate
+                </Text>
+
+                <View style={styles.cardsContainer}>
+
+                    <View style={styles.card}>
+                        <Text style={styles.cardTitle}>
+                            Sperm
+                        </Text>
+
+                        <Text style={styles.cardValue}>
+                            {analysis.total_sperm_million} Million
+                        </Text>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.cardTitle}>
+                            Motile Sperm
+                        </Text>
+
+                        <Text style={styles.cardValue}>
+                            {analysis.total_motile_sperm_million} Million
+                        </Text>
+
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.cardTitle}>
+                            Prog. Motile Sperm
+                        </Text>
+
+                        <Text style={styles.cardValue}>
+                            {analysis.progressive_motile_sperm_million} Million
+                        </Text>
+                    </View>
+
+                    <View style={styles.card}>
+                        <Text style={styles.cardTitle}>
+                            Morph. Normal Sperm
+                        </Text>
+
+                        <Text style={styles.cardValue}>
+                            {analysis.morphologically_normal_sperm_million} Million
+                        </Text>
+                    </View>
+
+                </View>
+
+                <Text style={styles.sectionTitle}>
+                    Comments
+                </Text>
+
+                <View
+                    style={{
+                        borderWidth: 1,
+                        padding: 8,
+                        marginBottom: 20,
+                    }}
+                >
+                    <Text>
+                        {analysis.comments || "-"}
+                    </Text>
+                </View>
+
+                <View
+                    style={{
+                        marginTop: 40,
+                        alignItems: "flex-end",
+                    }}
+                >
+                    <View
+                        style={{
+                            width: 180,
+                            textAlign: "center",
+                        }}
+                    >
+                        <View
+                            style={{
+                                height: 60,
+                            }}
+                        />
+
+                        <View
+                            style={{
+                                borderTopWidth: 1,
+                                paddingTop: 5,
+                            }}
+                        >
+                            <Text>Tested By</Text>
+
+                            <Text
+                                style={{
+                                    marginTop: 15,
+                                }}
+                            >
+                                Name: __________________
+                            </Text>
+
+                            <Text
+                                style={{
+                                    marginTop: 15,
+                                }}
+                            >
+                                Signature
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+                <View
+                    fixed
+                    style={styles.footer}
+                >
+
+                    <Text style={styles.footerTitle}>
+                        FERTILIS DIAGNOSTICS
+                    </Text>
+
+                    <Text style={styles.footerText}>
+                        Advanced Fertility & Andrology Laboratory
+                    </Text>
+
+                    <Text style={styles.footerText}>
+                        Phone: +91 XXXXX XXXXX | Email: info@fertilis.com
+                    </Text>
+
+                </View>
+                <Text
+                    style={styles.pageNumber}
+                    fixed
+                    render={({ pageNumber, totalPages }) =>
+                        `Page ${pageNumber} of ${totalPages}`
+                    }
+                />
+            </Page>
+        </Document>
+    );
+}

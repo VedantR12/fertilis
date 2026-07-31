@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/table";
 import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import {
+    useNavigate,
+    useSearchParams,
+    useLocation,
+} from "react-router-dom";
 import { getPatient } from "@/api/patients";
 
 export default function PatientDetails() {
@@ -21,6 +25,18 @@ export default function PatientDetails() {
     const [samples, setSamples] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const [searchParams] = useSearchParams();
+
+    const isSelectionMode =
+        searchParams.get("mode") === "select";
+
+    const isReportsMode =
+        location.pathname.startsWith("/admin/reports");
+
+    const selectedTest =
+        searchParams.get("test");
 
     useEffect(() => {
         async function loadPatient() {
@@ -53,7 +69,11 @@ export default function PatientDetails() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold">
-                        {patient.first_name} {patient.last_name}
+                        {isSelectionMode
+                            ? "Select Sample"
+                            : isReportsMode
+                                ? "Patient Reports"
+                                : `${patient.first_name} ${patient.last_name}`}
                     </h1>
 
                     <p className="text-muted-foreground">
@@ -61,26 +81,34 @@ export default function PatientDetails() {
                     </p>
                 </div>
 
-                <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        onClick={() =>
-                            navigate(`/admin/patients/${patient.patient_code}/edit`)
-                        }
-                    >
-                        Edit
-                    </Button>
+                {!isReportsMode && (
 
-                    <Button
-                        onClick={() =>
-                            navigate(
-                                `/admin/patients/${patient.patient_code}/samples/new`
-                            )
-                        }
-                    >
-                        Register Sample
-                    </Button>
-                </div>
+                    <div className="flex gap-2">
+
+                        <Button
+                            variant="outline"
+                            onClick={() =>
+                                navigate(`/admin/patients/${patient.patient_code}/edit`)
+                            }
+                        >
+                            Edit
+                        </Button>
+
+                        <Button
+                            onClick={() =>
+                                navigate(
+                                    isSelectionMode
+                                        ? `/admin/patients/${patient.patient_code}/samples/new?mode=select&test=${selectedTest}`
+                                        : `/admin/patients/${patient.patient_code}/samples/new`
+                                )
+                            }
+                        >
+                            Register Sample
+                        </Button>
+
+                    </div>
+
+                )}
             </div>
 
             <div className="rounded-lg border p-6 space-y-2">
@@ -98,7 +126,11 @@ export default function PatientDetails() {
             </div>
             <div className="space-y-4">
                 <h2 className="text-2xl font-semibold">
-                    Registered Samples
+                    {isSelectionMode
+                        ? "Select Sample"
+                        : isReportsMode
+                            ? "Available Samples"
+                            : "Registered Samples"}
                 </h2>
 
                 <div className="rounded-lg border">
@@ -127,9 +159,43 @@ export default function PatientDetails() {
                                     <TableRow
                                         key={sample.sample_code}
                                         className="cursor-pointer"
-                                        onClick={() =>
-                                            navigate(`/admin/samples/${sample.sample_code}`)
-                                        }
+                                        onClick={() => {
+
+                                            if (isSelectionMode) {
+
+                                                switch (selectedTest) {
+
+                                                    case "semen-analysis":
+                                                        navigate(`/admin/samples/${sample.sample_code}/analysis`);
+                                                        break;
+
+                                                    case "morphology":
+                                                        navigate(`/admin/samples/${sample.sample_code}/morphology`);
+                                                        break;
+
+                                                    case "dfi":
+                                                        navigate(`/admin/samples/${sample.sample_code}/dfi`);
+                                                        break;
+
+                                                    default:
+                                                        navigate(`/admin/samples/${sample.sample_code}`);
+
+                                                }
+
+                                            } else if (isReportsMode) {
+
+                                                navigate(
+                                                    `/admin/reports/${patient.patient_code}/${sample.sample_code}`
+                                                );
+
+                                            } else {
+
+                                                navigate(
+                                                    `/admin/samples/${sample.sample_code}`
+                                                );
+
+                                            }
+                                        }}
                                     >
                                         <TableCell>
                                             {sample.sample_code}
