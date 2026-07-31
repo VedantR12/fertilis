@@ -207,6 +207,7 @@ export default function SemenAnalysis() {
                 />
 
                 <MotilityMorphologySection
+                    control={control}
                     register={register}
                     errors={errors}
                 />

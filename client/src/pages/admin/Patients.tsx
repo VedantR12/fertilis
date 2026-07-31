@@ -91,7 +91,7 @@ export default function Patients() {
                 </div>
 
                 {!isReportsMode && (
-                    <Button asChild>
+                    <Button >
                         <Link
                             to={
                                 isSelectionMode
