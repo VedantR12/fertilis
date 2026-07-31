@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
+from datetime import date, timedelta
 from fastapi import HTTPException
 from math import ceil
 from app.models.sample import Sample
@@ -37,6 +38,9 @@ class SampleService:
             sample_type=data.sample_type,
             collection_datetime=data.collection_datetime,
             abstinence_days=data.abstinence_days,
+            collection_method=data.collection_method,
+            collection_place=data.collection_place,
+            remarks=data.remarks,
         )
 
         db.add(sample)
@@ -53,6 +57,10 @@ class SampleService:
     def get_samples(
         db: Session,
         search: str | None = None,
+        sample_type: str | None = None,
+        status: str | None = None,
+        from_date: date | None = None,
+        to_date: date | None = None,
         page: int = 1,
         limit: int = 20,
     ) -> SampleListResponse:
@@ -61,7 +69,7 @@ class SampleService:
             db.query(Sample)
             .join(Patient)
         )
-        
+
         if search:
             query = query.filter(
                 or_(
@@ -72,9 +80,29 @@ class SampleService:
                     Patient.last_name.ilike(f"%{search}%"),
                 )
             )
-        
+            
+        if sample_type:
+            query = query.filter(
+                Sample.sample_type.ilike(sample_type)
+            )
+
+        if status:
+            query = query.filter(
+                Sample.status.ilike(status)
+            )
+
+        if from_date:
+            query = query.filter(
+                Sample.collection_datetime >= from_date
+            )
+
+        if to_date:
+            query = query.filter(
+                Sample.collection_datetime < (to_date + timedelta(days=1))
+            )
+
         total = query.count()
-        
+
         samples = (
             query
             .order_by(Sample.created_at.desc())
@@ -138,3 +166,28 @@ class SampleService:
         db.refresh(sample)
 
         return sample
+    
+    @staticmethod
+    def get_patient_samples(
+        db: Session,
+        patient_code: str,
+    ) -> list[Sample]:
+    
+        patient = (
+            db.query(Patient)
+            .filter(Patient.patient_code == patient_code)
+            .first()
+        )
+    
+        if not patient:
+            raise HTTPException(
+                status_code=404,
+                detail="Patient not found",
+            )
+    
+        return (
+            db.query(Sample)
+            .filter(Sample.patient_id == patient.id)
+            .order_by(Sample.collection_datetime.desc())
+            .all()
+        )

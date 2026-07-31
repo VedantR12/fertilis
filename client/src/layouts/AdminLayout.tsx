@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "@/components/layout/Sidebar";
 import Navbar from "@/components/layout/Navbar";
 
-const ReceptionLayout = () => {
+const AdminLayout = () => {
   return (
     <div className="flex">
 
@@ -22,4 +22,4 @@ const ReceptionLayout = () => {
   );
 };
 
-export default ReceptionLayout;
+export default AdminLayout;

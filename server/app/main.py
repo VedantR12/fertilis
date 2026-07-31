@@ -3,10 +3,21 @@ from sqlalchemy import text
 from app.api.v1 import semen_analysis, morphology, dfi
 from app.api.v1 import auth, patients, samples
 from app.core.database import engine
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title="FertiLIS API",
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(auth.router, prefix="/api/v1")

@@ -17,6 +17,18 @@ class SampleCreate(BaseModel):
         le=30,
     )
 
+    collection_method: str | None = Field(
+        default=None,
+        max_length=50,
+    )
+
+    collection_place: str | None = Field(
+        default=None,
+        max_length=50,
+    )
+
+    remarks: str | None = None
+
 
 class SampleUpdate(BaseModel):
     sample_type: str | None = Field(
@@ -36,6 +48,18 @@ class SampleUpdate(BaseModel):
         default=None,
         max_length=30,
     )
+    
+    collection_method: str | None = Field(
+        default=None,
+        max_length=50,
+    )
+
+    collection_place: str | None = Field(
+        default=None,
+        max_length=50,
+    )
+
+    remarks: str | None = None
 
 
 class SampleResponse(BaseModel):
@@ -46,7 +70,10 @@ class SampleResponse(BaseModel):
     collection_datetime: datetime
     abstinence_days: int
     status: str
-
+    collection_method: str | None
+    collection_place: str | None
+    remarks: str | None
+    
     model_config = {
         "from_attributes": True
     }

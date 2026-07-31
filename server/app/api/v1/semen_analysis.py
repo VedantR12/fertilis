@@ -2,18 +2,21 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.core.dependencies import require_reception
+from app.core.dependencies import require_admin
+
 from app.schemas.semen_analysis import (
     SemenAnalysisCreate,
     SemenAnalysisUpdate,
     SemenAnalysisResponse,
 )
+
 from app.services.semen_analysis import SemenAnalysisService
 
 router = APIRouter(
     prefix="/semen-analyses",
     tags=["Semen Analyses"],
 )
+
 
 @router.post(
     "",
@@ -22,9 +25,10 @@ router = APIRouter(
 def create_analysis(
     data: SemenAnalysisCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return SemenAnalysisService.create_analysis(db, data)
+
 
 @router.get(
     "",
@@ -32,9 +36,10 @@ def create_analysis(
 )
 def get_analyses(
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return SemenAnalysisService.get_analyses(db)
+
 
 @router.get(
     "/{sample_code}",
@@ -43,13 +48,14 @@ def get_analyses(
 def get_analysis(
     sample_code: str,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return SemenAnalysisService.get_analysis(
         db,
         sample_code,
     )
-    
+
+
 @router.patch(
     "/{sample_code}",
     response_model=SemenAnalysisResponse,
@@ -58,7 +64,7 @@ def update_analysis(
     sample_code: str,
     data: SemenAnalysisUpdate,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return SemenAnalysisService.update_analysis(
         db,

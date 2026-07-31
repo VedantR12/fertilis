@@ -1,35 +1,91 @@
-import { LayoutDashboard, Users, UserPlus, LogOut } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  FlaskConical,
+  FileText,
+  Settings,
+  LogOut,
+} from "lucide-react";
+
+import { NavLink, useNavigate } from "react-router-dom";
+
+import useAuthStore from "@/store/authStore";
+
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: LayoutDashboard,
+    path: "/admin",
+  },
+  {
+    title: "Patients",
+    icon: Users,
+    path: "/admin/patients",
+  },
+  {
+    title: "Samples",
+    icon: FlaskConical,
+    path: "/admin/samples",
+  },
+  {
+    title: "Reports",
+    icon: FileText,
+    path: "/admin/reports",
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    path: "/admin/settings",
+  },
+];
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
-    <aside className="w-64 border-r bg-white min-h-screen">
-      <div className="p-6 border-b">
+    <aside className="flex h-screen w-64 flex-col border-r bg-white">
+
+      <div className="border-b p-6">
         <h1 className="text-2xl font-bold text-blue-600">
           FertiLIS
         </h1>
       </div>
 
-      <nav className="p-4 space-y-2">
+      <nav className="flex-1 space-y-2 p-4">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
 
-        <button className="flex items-center gap-3 w-full rounded-lg p-3 hover:bg-gray-100">
-          <LayoutDashboard size={20} />
-          Dashboard
-        </button>
-
-        <button className="flex items-center gap-3 w-full rounded-lg p-3 hover:bg-gray-100">
-          <Users size={20} />
-          Patients
-        </button>
-
-        <button className="flex items-center gap-3 w-full rounded-lg p-3 hover:bg-gray-100">
-          <UserPlus size={20} />
-          New Patient
-        </button>
-
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.path === "/admin"}
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-lg p-3 transition-colors ${
+                  isActive
+                    ? "bg-blue-600 text-white"
+                    : "hover:bg-gray-100"
+                }`
+              }
+            >
+              <Icon size={20} />
+              <span>{item.title}</span>
+            </NavLink>
+          );
+        })}
       </nav>
 
-      <div className="absolute bottom-0 w-64 border-t p-4">
-        <button className="flex items-center gap-3 text-red-500">
+      <div className="border-t p-4">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-lg p-3 text-red-500 hover:bg-red-50"
+        >
           <LogOut size={20} />
           Logout
         </button>

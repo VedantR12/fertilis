@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from app.models.base import Base, TimestampMixin
 
 from typing import TYPE_CHECKING
@@ -43,6 +43,21 @@ class Sample(Base, TimestampMixin):
     abstinence_days: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
+    )
+    
+    collection_method: Mapped[str | None] = mapped_column(
+        String(50),
+        nullable=True,
+    )
+
+    collection_place: Mapped[str | None] = mapped_column(
+        String(50),
+        nullable=True,
+    )
+
+    remarks: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     status: Mapped[str] = mapped_column(

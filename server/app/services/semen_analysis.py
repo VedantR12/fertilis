@@ -43,17 +43,38 @@ class SemenAnalysisService:
 
         analysis = SemenAnalysis(
             sample_id=sample.id,
+
+            # General
+            criteria=data.criteria,
+
+            # Macroscopic
             volume_ml=data.volume_ml,
+            appearance=data.appearance,
             ph=data.ph,
-            concentration_million_ml=data.concentration_million_ml,
+            viscosity=data.viscosity,
+            liquefaction_minutes=data.liquefaction_minutes,
+
+            # Microscopic
+            sperm_concentration_million_ml=data.sperm_concentration_million_ml,
+            wbc_concentration_million_ml=data.wbc_concentration_million_ml,
+            pus_cells=data.pus_cells,
+            debris=data.debris,
+            agglutination=data.agglutination,
+
+            # Motility
             total_motility_percent=data.total_motility_percent,
             progressive_motility_percent=data.progressive_motility_percent,
-            morphology_percent=data.morphology_percent,
-            vitality_percent=data.vitality_percent,
-            wbc_million_ml=data.wbc_million_ml,
-            liquefaction_minutes=data.liquefaction_minutes,
-            viscosity=data.viscosity,
-            appearance=data.appearance,
+            rapid_progressive_percent=data.rapid_progressive_percent,
+            slow_progressive_percent=data.slow_progressive_percent,
+            non_progressive_percent=data.non_progressive_percent,
+            immotile_percent=data.immotile_percent,
+
+            # Morphology
+            morphology_normal_percent=data.morphology_normal_percent,
+            morphology_abnormal_percent=data.morphology_abnormal_percent,
+
+            # Comments
+            comments=data.comments,
         )
 
         db.add(analysis)

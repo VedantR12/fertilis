@@ -2,12 +2,19 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.schemas.auth import LoginRequest, TokenResponse
-from app.services.auth import AuthService
-from app.core.dependencies import get_current_user
+from app.core.dependencies import (
+    get_current_user,
+    require_admin,
+)
 from app.models.user import User
+
+from app.schemas.auth import (
+    LoginRequest,
+    TokenResponse,
+)
 from app.schemas.user import UserResponse
-from app.core.dependencies import require_admin
+
+from app.services.auth import AuthService
 
 router = APIRouter(
     prefix="/auth",
@@ -28,7 +35,8 @@ def login(
         username=data.username,
         password=data.password,
     )
-    
+
+
 @router.get(
     "/me",
     response_model=UserResponse,
@@ -37,6 +45,7 @@ def get_me(
     current_user: User = Depends(get_current_user),
 ):
     return current_user
+
 
 @router.get("/admin-test")
 def admin_test(
@@ -51,5 +60,5 @@ def admin_test(
 @router.get("/health")
 def auth_health():
     return {
-        "message": "Authentication API Ready"
+        "message": "Authentication API Ready",
     }

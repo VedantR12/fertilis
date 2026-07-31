@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.core.dependencies import require_reception
+from app.core.dependencies import require_admin
 
 from app.schemas.morphology import (
     MorphologyCreate,
@@ -25,7 +25,7 @@ router = APIRouter(
 def create_morphology(
     data: MorphologyCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return MorphologyService.create_morphology(
         db,
@@ -39,7 +39,7 @@ def create_morphology(
 )
 def get_morphologies(
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return MorphologyService.get_morphologies(db)
 
@@ -51,7 +51,7 @@ def get_morphologies(
 def get_morphology(
     sample_code: str,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return MorphologyService.get_morphology(
         db,
@@ -67,7 +67,7 @@ def update_morphology(
     sample_code: str,
     data: MorphologyUpdate,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_reception),
+    _: dict = Depends(require_admin),
 ):
     return MorphologyService.update_morphology(
         db,

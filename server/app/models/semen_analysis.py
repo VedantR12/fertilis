@@ -1,4 +1,4 @@
-from sqlalchemy import Float, ForeignKey, Integer, String
+from sqlalchemy import Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin
@@ -23,8 +23,26 @@ class SemenAnalysis(Base, TimestampMixin):
         nullable=False,
     )
 
+    # -------------------------
+    # General
+    # -------------------------
+
+    criteria: Mapped[str] = mapped_column(
+        String(30),
+        nullable=False,
+    )
+
+    # -------------------------
+    # Macroscopic Examination
+    # -------------------------
+
     volume_ml: Mapped[float] = mapped_column(
         Float,
+        nullable=False,
+    )
+
+    appearance: Mapped[str] = mapped_column(
+        String(30),
         nullable=False,
     )
 
@@ -33,10 +51,48 @@ class SemenAnalysis(Base, TimestampMixin):
         nullable=False,
     )
 
-    concentration_million_ml: Mapped[float] = mapped_column(
+    viscosity: Mapped[str] = mapped_column(
+        String(30),
+        nullable=False,
+    )
+
+    liquefaction_minutes: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    # -------------------------
+    # Microscopic Examination
+    # -------------------------
+
+    sperm_concentration_million_ml: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
+
+    wbc_concentration_million_ml: Mapped[float] = mapped_column(
+        Float,
+        nullable=False,
+    )
+
+    pus_cells: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+
+    debris: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+
+    agglutination: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+
+    # -------------------------
+    # Motility
+    # -------------------------
 
     total_motility_percent: Mapped[float] = mapped_column(
         Float,
@@ -48,41 +104,54 @@ class SemenAnalysis(Base, TimestampMixin):
         nullable=False,
     )
 
-    morphology_percent: Mapped[float] = mapped_column(
+    rapid_progressive_percent: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
 
-    vitality_percent: Mapped[float] = mapped_column(
+    slow_progressive_percent: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
 
-    wbc_million_ml: Mapped[float] = mapped_column(
+    non_progressive_percent: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
 
-    liquefaction_minutes: Mapped[int] = mapped_column(
-        Integer,
+    immotile_percent: Mapped[float] = mapped_column(
+        Float,
         nullable=False,
     )
 
-    viscosity: Mapped[str] = mapped_column(
-        String(50),
+    # -------------------------
+    # Morphology
+    # -------------------------
+
+    morphology_normal_percent: Mapped[float] = mapped_column(
+        Float,
         nullable=False,
     )
 
-    appearance: Mapped[str] = mapped_column(
-        String(100),
+    morphology_abnormal_percent: Mapped[float] = mapped_column(
+        Float,
         nullable=False,
+    )
+
+    # -------------------------
+    # Comments
+    # -------------------------
+
+    comments: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     sample: Mapped["Sample"] = relationship(
         "Sample",
         back_populates="analysis",
     )
-    
+
     @property
     def sample_code(self) -> str:
         return self.sample.sample_code

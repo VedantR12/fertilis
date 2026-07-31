@@ -8,7 +8,10 @@ from app.models.user import User
 class AuthService:
 
     @staticmethod
-    def get_user_by_username(db: Session, username: str):
+    def get_user_by_username(
+        db: Session,
+        username: str,
+    ):
         return (
             db.query(User)
             .filter(User.username == username)
@@ -21,7 +24,10 @@ class AuthService:
         username: str,
         password: str,
     ):
-        user = AuthService.get_user_by_username(db, username)
+        user = AuthService.get_user_by_username(
+            db,
+            username,
+        )
 
         if not user:
             raise HTTPException(
@@ -35,7 +41,10 @@ class AuthService:
                 detail="User account is inactive",
             )
 
-        if not verify_password(password, user.password_hash):
+        if not verify_password(
+            password,
+            user.password_hash,
+        ):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid username or password",
@@ -50,16 +59,16 @@ class AuthService:
         password: str,
     ):
         user = AuthService.authenticate_user(
-            db,
-            username,
-            password,
+            db=db,
+            username=username,
+            password=password,
         )
 
         access_token = create_access_token(
             data={
                 "sub": user.username,
-                "role": user.role.value,
                 "user_id": user.id,
+                "role": user.role.value,
             }
         )
 
