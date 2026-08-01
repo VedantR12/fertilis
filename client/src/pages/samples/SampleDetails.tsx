@@ -8,7 +8,6 @@ import type { Sample } from "@/lib/schemas/sample";
 import {
     useNavigate,
     useParams,
-    useSearchParams,
     useLocation,
 } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card";
@@ -21,7 +20,6 @@ export default function SampleDetails() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
-    const [searchParams] = useSearchParams();
 
     const isReportsMode =
     location.pathname.startsWith("/admin/reports");

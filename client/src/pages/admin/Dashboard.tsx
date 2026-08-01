@@ -1,4 +1,4 @@
-import { CalendarDays, Users, TestTube2, FileText, ArrowRight } from "lucide-react";
+import { CalendarDays, Users, TestTube2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import useAuthStore from "@/store/authStore";

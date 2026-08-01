@@ -38,3 +38,13 @@ export const patientSchema = z.object({
 });
 
 export type PatientFormData = z.infer<typeof patientSchema>;
+
+export interface Patient {
+    id: number;
+    patient_code: string;
+    first_name: string;
+    last_name?: string;
+    age: number;
+    phone?: string | null;
+    doctor?: string | null;
+}

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import type { Resolver } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -28,7 +28,7 @@ export function SampleForm({
   loading = false,
 }: SampleFormProps) {
   const form = useForm<SampleFormData>({
-    resolver: zodResolver(sampleSchema),
+    resolver: zodResolver(sampleSchema) as Resolver<SampleFormData>,
     defaultValues:
       defaultValues ?? {
         patient_code: "",

@@ -4,7 +4,7 @@ import {
     useSearchParams,
     useLocation,
 } from "react-router-dom";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getPatients } from "@/services/patient";
 import type { Patient } from "@/types/patient";
@@ -15,7 +15,7 @@ export default function Patients() {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
-    const [pagination, setPagination] = useState({
+    const [, setPagination] = useState({
         page: 1,
         limit: 20,
         total: 0,

@@ -36,7 +36,6 @@ export default function SemenAnalysis() {
         register,
         handleSubmit,
         reset,
-        watch,
         formState: {
             errors,
         },

@@ -9,7 +9,6 @@ import Dashboard from "./pages/admin/Dashboard";
 import Patients from "./pages/admin/Patients";
 import NewPatient from "./pages/admin/NewPatient";
 import Samples from "./pages/admin/Samples";
-import Reports from "./pages/admin/Reports";
 import Settings from "./pages/admin/Settings";
 import PatientDetails from "@/pages/patients/PatientDetails";
 import EditPatient from "@/pages/patients/EditPatient";
