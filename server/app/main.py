@@ -6,7 +6,7 @@ from app.core.database import engine
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
-    title="FertiLIS API",
+    title="Embrogen API",
     version="1.0.0",
 )
 
@@ -29,7 +29,7 @@ app.include_router(dashboard.router, prefix="/api/v1")
 
 @app.get("/")
 def root():
-    return {"message": "FertiLIS Backend Running"}
+    return {"message": "Embrogen Backend Running"}
 
 
 @app.get("/health")

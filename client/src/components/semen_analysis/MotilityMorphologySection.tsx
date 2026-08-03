@@ -120,7 +120,10 @@ export default function MotilityMorphologySection({
                             type="number"
                             step="0.1"
                             {...register("morphology_normal_percent", {
-                                valueAsNumber: true,
+                                setValueAs: (value) =>
+                                    value === ""
+                                        ? undefined
+                                        : Number(value),
                             })}
                         />
                         <FieldError errors={[errors.morphology_normal_percent]} />
@@ -132,7 +135,10 @@ export default function MotilityMorphologySection({
                             type="number"
                             step="0.1"
                             {...register("morphology_abnormal_percent", {
-                                valueAsNumber: true,
+                                setValueAs: (value) =>
+                                    value === ""
+                                        ? undefined
+                                        : Number(value),
                             })}
                         />
                         <FieldError errors={[errors.morphology_abnormal_percent]} />

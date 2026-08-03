@@ -8,13 +8,25 @@ class MorphologyCreate(BaseModel):
 
     head_defects_percent: float = Field(ge=0, le=100)
 
-    neck_midpiece_defects_percent: float = Field(ge=0, le=100)
+    midpiece_defects_percent: float = Field(ge=0, le=100)
 
     tail_defects_percent: float = Field(ge=0, le=100)
+    
+    pin_heads_percent: float = Field(ge=0, le=100)
 
-    excess_residual_cytoplasm_percent: float = Field(ge=0, le=100)
+    live_sperm_percent: float = Field(ge=0, le=100)
 
-    sperm_evaluated: int = Field(ge=1)
+    dead_sperm_percent: float = Field(ge=0, le=100)
+
+    fructose: str = Field(min_length=1, max_length=20)
+
+    aggregation_agglutination: str = Field(
+        min_length=1,
+        max_length=20,
+    )
+
+    comments: str | None = None
+
 
 
 class MorphologyUpdate(BaseModel):
@@ -22,13 +34,42 @@ class MorphologyUpdate(BaseModel):
 
     head_defects_percent: float | None = Field(default=None, ge=0, le=100)
 
-    neck_midpiece_defects_percent: float | None = Field(default=None, ge=0, le=100)
+    midpiece_defects_percent: float | None = Field(default=None, ge=0, le=100)
 
     tail_defects_percent: float | None = Field(default=None, ge=0, le=100)
+    
+    pin_heads_percent: float | None = Field(
+        default=None,
+        ge=0,
+        le=100,
+    )
 
-    excess_residual_cytoplasm_percent: float | None = Field(default=None, ge=0, le=100)
+    live_sperm_percent: float | None = Field(
+        default=None,
+        ge=0,
+        le=100,
+    )
 
-    sperm_evaluated: int | None = Field(default=None, ge=1)
+    dead_sperm_percent: float | None = Field(
+        default=None,
+        ge=0,
+        le=100,
+    )
+
+    fructose: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=20,
+    )
+
+    aggregation_agglutination: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=20,
+    )
+
+    comments: str | None = None
+    
 
 
 class MorphologyResponse(BaseModel):
@@ -40,14 +81,22 @@ class MorphologyResponse(BaseModel):
 
     head_defects_percent: float
 
-    neck_midpiece_defects_percent: float
+    midpiece_defects_percent: float
 
     tail_defects_percent: float
+    
+    pin_heads_percent: float
 
-    excess_residual_cytoplasm_percent: float
-
-    sperm_evaluated: int
-
+    live_sperm_percent: float
+    
+    dead_sperm_percent: float
+    
+    fructose: str
+    
+    aggregation_agglutination: str
+    
+    comments: str | None
+    
     model_config = {
         "from_attributes": True,
     }

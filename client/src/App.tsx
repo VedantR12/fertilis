@@ -16,7 +16,12 @@ import RegisterSample from "@/pages/samples/RegisterSample";
 import SampleDetails from "@/pages/samples/SampleDetails";
 import SemenAnalysis from "@/pages/semen_analysis/SemenAnalysis";
 import SemenAnalysisReport from "@/pages/semen_analysis/SemenAnalysisReport";
+import Morphology from "@/pages/morphology/Morphology";
+import MorphologyReport from "@/pages/morphology/MorphologyReport";
+import DFI from "@/pages/dfi/DFI";1
+import DFIReport from "@/pages/dfi/DFIReport";
 import Tests from "./pages/admin/Tests";
+
 
 function App() {
   const { token, restoreUser, logout, setLoading } = useAuthStore();
@@ -72,6 +77,10 @@ function App() {
           <Route path="/admin/samples/:sampleCode" element={<SampleDetails />} />
           <Route path="/admin/samples/:sampleCode/analysis" element={<SemenAnalysis />} />
           <Route path="/admin/samples/:sampleCode/report" element={<SemenAnalysisReport />} />
+          <Route path="/admin/samples/:sampleCode/morphology" element={<Morphology />} />
+          <Route path="/admin/samples/:sampleCode/morphology/report" element={<MorphologyReport />} />
+          <Route path="/admin/samples/:sampleCode/dfi" element={<DFI />} />
+          <Route path="/admin/samples/:sampleCode/dfi/report" element={<DFIReport />} />
         </Route>
 
         {/* We'll add these when those modules exist */}

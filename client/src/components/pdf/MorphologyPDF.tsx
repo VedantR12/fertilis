@@ -8,14 +8,15 @@ import {
 
 import type { Sample } from "@/lib/schemas/sample";
 import type { Patient } from "@/lib/schemas/patient";
-import type { SemenAnalysis } from "@/lib/schemas/semen_analysis";
+import type { Morphology } from "@/lib/schemas/morphology";
+
 import PDFTable from "./PDFTable";
-import MotilityPieChart from "@/components/pdf/MotilityPieChart";
+import MotilityPieChart from "./MotilityPieChart";
 
 interface Props {
     sample: Sample;
     patient: Patient;
-    analysis: SemenAnalysis;
+    morphology: Morphology;
 }
 
 const styles = StyleSheet.create({
@@ -32,12 +33,9 @@ const styles = StyleSheet.create({
         bottom: 20,
         left: 30,
         right: 30,
-
         borderTopWidth: 0.5,
         borderTopColor: "#999",
-
         paddingTop: 6,
-
         alignItems: "center",
     },
 
@@ -95,71 +93,37 @@ const styles = StyleSheet.create({
     value: {
         width: "25%",
     },
-    cardsContainer: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        marginTop: 6,
-        marginBottom: 18,
-    },
-
-    card: {
-        width: "48%",
-        borderWidth: 1,
-        borderColor: "#000",
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        marginBottom: 8,
-    },
-
-    cardTitle: {
-        fontSize: 10,
-        color: "#444",
-        marginBottom: 6,
-    },
-
-    cardValue: {
-        fontSize: 12,
-        fontWeight: "normal",
-        textAlign: "center",
-    },
-
-    cardUnit: {
-        fontSize: 8,
-        color: "#666",
-        textAlign: "center",
-        marginTop: 2,
-    },
 
     watermark: {
         position: "absolute",
         top: 320,
         left: 80,
-
         fontSize: 80,
         fontWeight: "bold",
-
         color: "#eeeeee",
-
         transform: "rotate(-35deg)",
     },
 });
 
-export default function SemenAnalysisPDF({
+export default function MorphologyPDF({
     sample,
     patient,
-    analysis,
+    morphology,
 }: Props) {
 
     const reportDate = new Intl.DateTimeFormat("en-GB", {
         day: "2-digit",
         month: "short",
         year: "numeric",
-    }).format(new Date(analysis.created_at));
+    }).format(new Date());
 
     return (
         <Document>
-            <Page size="A4" style={styles.page}>
+
+            <Page
+                size="A4"
+                style={styles.page}
+            >
 
                 <Text
                     fixed
@@ -168,9 +132,8 @@ export default function SemenAnalysisPDF({
                     Embrogen
                 </Text>
 
-
                 <Text style={styles.title}>
-                    SEMEN ANALYSIS REPORT
+                    SPERM MORPHOLOGY REPORT
                 </Text>
 
                 <Text
@@ -214,20 +177,23 @@ export default function SemenAnalysisPDF({
                     </View>
 
                     <View style={styles.row}>
-                        <Text style={styles.label}>Address</Text>
 
-                        <Text
-                            style={{
-                                width: "25%",
-                                fontSize: 9,
-                            }}
-                        >
+                        <Text style={styles.label}>
+                            Address
+                        </Text>
+
+                        <Text style={styles.value}>
                             {patient.address || "-"}
                         </Text>
-                        <Text style={styles.label}>Doctor</Text>
-                        <Text style={styles.value}>
-                            {patient.doctor}
+
+                        <Text style={styles.label}>
+                            Doctor
                         </Text>
+
+                        <Text style={styles.value}>
+                            {patient.doctor || "-"}
+                        </Text>
+
                     </View>
 
                 </View>
@@ -295,6 +261,7 @@ export default function SemenAnalysisPDF({
 
                     <View style={styles.row}>
                         <Text style={styles.label}>Remarks</Text>
+
                         <Text style={{ flex: 1 }}>
                             {sample.remarks || "-"}
                         </Text>
@@ -306,77 +273,92 @@ export default function SemenAnalysisPDF({
                     Results
                 </Text>
 
-                <PDFTable
-                    title="Macroscopic Examination"
-                    rows={[
-                        {
-                            parameter: "Volume",
-                            result: analysis.volume_ml,
-                            unit: "ml",
-                            reference: ">= 1.4",
-                        },
-                        {
-                            parameter: "Appearance",
-                            result: analysis.appearance,
-                            unit: "-",
-                            reference: "-",
-                        },
-                        {
-                            parameter: "pH",
-                            result: analysis.ph,
-                            unit: "-",
-                            reference: "7.2–8.0",
-                        },
-                        {
-                            parameter: "Viscosity",
-                            result: analysis.viscosity,
-                            unit: "-",
-                            reference: "-",
-                        },
-                        {
-                            parameter: "Liquefaction Time",
-                            result: analysis.liquefaction_minutes,
-                            unit: "min",
-                            reference: "<= 60",
-                        },
-                    ]}
-                />
+                <View
+                    wrap={false}
+                    style={{
+                        flexDirection: "row",
+                        alignItems: "stretch",
+                        marginBottom: 18,
+                    }}
+                >
+                    <View
+                        style={{
+                            width: "65%",
+                            paddingRight: 6,
+                        }}
+                    >
 
-                <PDFTable
-                    title="Microscopic Examination"
-                    rows={[
-                        {
-                            parameter: "Sperm Concentration",
-                            result: analysis.sperm_concentration_million_ml,
-                            unit: "million/ml",
-                            reference: ">= 16",
-                        },
-                        {
-                            parameter: "WBC Concentration",
-                            result: analysis.wbc_concentration_million_ml,
-                            unit: "million/ml",
-                            reference: "< 1",
-                        },
-                        {
-                            parameter: "Pus Cells",
-                            result: analysis.pus_cells,
-                            unit: "-",
-                            reference: "Nil/Few",
-                        },
-                        {
-                            parameter: "Debris",
-                            result: analysis.debris,
-                            unit: "-",
-                            reference: "Absent/Mild",
-                        },
-                        {
-                            parameter: "Agglutination",
-                            result: analysis.agglutination,
-                            unit: "-",
-                            reference: "Absent",
-                        },
-                    ]}
-                />
+                        <PDFTable
+                            title="Morphology Examination"
+                            rows={[
+                                {
+                                    parameter: "Normal Forms",
+                                    result: morphology.normal_forms_percent,
+                                    unit: "%",
+                                    reference: ">= 4",
+                                },
+                                {
+                                    parameter: "Head Defects",
+                                    result: morphology.head_defects_percent,
+                                    unit: "%",
+                                    reference: "-",
+                                },
+                                {
+                                    parameter: "Midpiece Defects",
+                                    result: morphology.midpiece_defects_percent,
+                                    unit: "%",
+                                    reference: "-",
+                                },
+                                {
+                                    parameter: "Tail Defects",
+                                    result: morphology.tail_defects_percent,
+                                    unit: "%",
+                                    reference: "-",
+                                },
+                                {
+                                    parameter: "Pin Heads",
+                                    result: morphology.pin_heads_percent,
+                                    unit: "%",
+                                    reference: "-",
+                                },
+                            ]}
+                        />
+                    </View>
+                    <View
+                        style={{
+                            width: "35%",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            paddingLeft: 10,
+                        }}
+                    >
+                        <MotilityPieChart
+                            slices={[
+                                {
+                                    label: "Normal Forms",
+                                    value: morphology.normal_forms_percent,
+                                },
+                                {
+                                    label: "Head Defects",
+                                    value: morphology.head_defects_percent,
+                                },
+                                {
+                                    label: "Midpiece Defects",
+                                    value: morphology.midpiece_defects_percent,
+                                },
+                                {
+                                    label: "Tail Defects",
+                                    value: morphology.tail_defects_percent,
+                                },
+                                {
+                                    label: "Pin Heads",
+                                    value: morphology.pin_heads_percent,
+                                },
+                            ]}
+                        />
+                    </View>
+
+                </View>
 
                 <View
                     wrap={false}
@@ -393,150 +375,66 @@ export default function SemenAnalysisPDF({
                             paddingRight: 6,
                         }}
                     >
+
                         <PDFTable
-                            title="Motility"
+                            title="Vitality"
                             rows={[
                                 {
-                                    parameter: "Total Motility",
-                                    result: analysis.total_motility_percent,
+                                    parameter: "Live Sperm",
+                                    result: morphology.live_sperm_percent,
                                     unit: "%",
-                                    reference: ">= 42",
+                                    reference: ">= 58",
                                 },
                                 {
-                                    parameter: "Progressive Motility",
-                                    result: analysis.progressive_motility_percent,
+                                    parameter: "Dead Sperm",
+                                    result: morphology.dead_sperm_percent,
                                     unit: "%",
-                                    reference: ">= 30",
-                                },
-                                {
-                                    parameter: "Rapid Progressive",
-                                    result: analysis.rapid_progressive_percent,
-                                    unit: "%",
-                                    reference: "-",
-                                },
-                                {
-                                    parameter: "Slow Progressive",
-                                    result: analysis.slow_progressive_percent,
-                                    unit: "%",
-                                    reference: "-",
-                                },
-                                {
-                                    parameter: "Non Progressive",
-                                    result: analysis.non_progressive_percent,
-                                    unit: "%",
-                                    reference: "<=1",
-                                },
-                                {
-                                    parameter: "Immotile",
-                                    result: analysis.immotile_percent,
-                                    unit: "%",
-                                    reference: "<=20",
+                                    reference: "<= 42",
                                 },
                             ]}
                         />
+
                     </View>
+
                     <View
                         style={{
                             width: "35%",
-                            paddingLeft: 6,
+                            paddingLeft: 10,
                         }}
                     >
                         <MotilityPieChart
                             slices={[
                                 {
-                                    label: "Rapid Progressive",
-                                    value: analysis.rapid_progressive_percent,
+                                    label: "Live Sperm",
+                                    value: morphology.live_sperm_percent,
                                 },
                                 {
-                                    label: "Slow Progressive",
-                                    value: analysis.slow_progressive_percent,
-                                },
-                                {
-                                    label: "Non Progressive",
-                                    value: analysis.non_progressive_percent,
-                                },
-                                {
-                                    label: "Immotile",
-                                    value: analysis.immotile_percent,
+                                    label: "Dead Sperm",
+                                    value: morphology.dead_sperm_percent,
                                 },
                             ]}
                         />
                     </View>
+
                 </View>
 
                 <PDFTable
-                    title="Morphology"
+                    title="Additional Findings"
                     rows={[
                         {
-                            parameter: "Normal Forms",
-                            result: analysis.morphology_normal_percent == null
-                                ? "N/A"
-                                : `${analysis.morphology_normal_percent}%`,
-                            unit: "%",
-                            reference: ">= 4",
+                            parameter: "Fructose",
+                            result: morphology.fructose,
+                            unit: "-",
+                            reference: "Present",
                         },
                         {
-
-                            parameter: "Abnormal Forms",
-                            result: analysis.morphology_abnormal_percent == null
-                                ? "N/A"
-                                : `${analysis.morphology_abnormal_percent}%`,
-                            unit: "%",
-                            reference: "< 96",
+                            parameter: "Aggregation / Agglutination",
+                            result: morphology.aggregation_agglutination,
+                            unit: "-",
+                            reference: "None",
                         },
                     ]}
                 />
-
-                <Text style={styles.sectionTitle}>
-                    Totals per Ejaculate
-                </Text>
-
-                <View style={styles.cardsContainer}>
-
-                    <View style={styles.card}>
-                        <Text style={styles.cardTitle}>
-                            Sperm
-                        </Text>
-
-                        <Text style={styles.cardValue}>
-                            {analysis.total_sperm_million} Million
-                        </Text>
-                    </View>
-
-                    <View style={styles.card}>
-                        <Text style={styles.cardTitle}>
-                            Motile Sperm
-                        </Text>
-
-                        <Text style={styles.cardValue}>
-                            {analysis.total_motile_sperm_million} Million
-                        </Text>
-
-                    </View>
-
-                    <View style={styles.card}>
-                        <Text style={styles.cardTitle}>
-                            Prog. Motile Sperm
-                        </Text>
-
-                        <Text style={styles.cardValue}>
-                            {analysis.progressive_motile_sperm_million} Million
-                        </Text>
-                    </View>
-
-                    <View style={styles.card}>
-                        <Text style={styles.cardTitle}>
-                            Morph. Normal Sperm
-                        </Text>
-
-                        <Text style={styles.cardValue}>
-                            {analysis.morphologically_normal_sperm_million == null
-                                ? "N/A"
-                                : analysis.morphologically_normal_sperm_million.toFixed(2)} Million
-                        </Text>
-                    </View>
-
-                </View>
 
                 <Text style={styles.sectionTitle}>
                     Comments
@@ -549,10 +447,13 @@ export default function SemenAnalysisPDF({
                         marginBottom: 20,
                     }}
                 >
+
                     <Text>
-                        {analysis.comments || "-"}
+                        {morphology.comments || "-"}
                     </Text>
+
                 </View>
+
 
                 <View
                     style={{
@@ -598,11 +499,11 @@ export default function SemenAnalysisPDF({
                         </View>
                     </View>
                 </View>
+
                 <View
                     fixed
                     style={styles.footer}
                 >
-
                     <Text style={styles.footerTitle}>
                         Embrogen
                     </Text>
@@ -614,15 +515,16 @@ export default function SemenAnalysisPDF({
                     <Text style={styles.footerText}>
                         Phone: +91 XXXXX XXXXX | Email: info@embrogen.com
                     </Text>
-
                 </View>
+
                 <Text
-                    style={styles.pageNumber}
                     fixed
+                    style={styles.pageNumber}
                     render={({ pageNumber, totalPages }) =>
                         `Page ${pageNumber} of ${totalPages}`
                     }
                 />
+
             </Page>
         </Document>
     );

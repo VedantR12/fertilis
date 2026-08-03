@@ -22,7 +22,7 @@ export default function SampleDetails() {
     const location = useLocation();
 
     const isReportsMode =
-    location.pathname.startsWith("/admin/reports");
+        location.pathname.startsWith("/admin/reports");
 
     useEffect(() => {
         async function loadSample() {
@@ -118,12 +118,18 @@ export default function SampleDetails() {
 
                                                 case "morphology":
 
-                                                    // We'll create this later
+                                                    navigate(
+                                                        `/admin/samples/${sample.sample_code}/morphology/report`
+                                                    );
+
                                                     break;
 
                                                 case "dfi":
 
-                                                    // We'll create this later
+                                                    navigate(
+                                                        `/admin/samples/${sample.sample_code}/dfi/report`
+                                                    );
+
                                                     break;
 
                                             }

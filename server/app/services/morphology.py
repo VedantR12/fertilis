@@ -45,10 +45,19 @@ class MorphologyService:
             sample_id=sample.id,
             normal_forms_percent=data.normal_forms_percent,
             head_defects_percent=data.head_defects_percent,
-            neck_midpiece_defects_percent=data.neck_midpiece_defects_percent,
+            midpiece_defects_percent=data.midpiece_defects_percent,
             tail_defects_percent=data.tail_defects_percent,
-            excess_residual_cytoplasm_percent=data.excess_residual_cytoplasm_percent,
-            sperm_evaluated=data.sperm_evaluated,
+            
+            pin_heads_percent=data.pin_heads_percent,
+            
+            live_sperm_percent=data.live_sperm_percent,
+            dead_sperm_percent=data.dead_sperm_percent,
+            
+            fructose=data.fructose,
+            
+            aggregation_agglutination=data.aggregation_agglutination,
+            
+            comments=data.comments,
         )
 
         db.add(morphology)

@@ -29,6 +29,13 @@ export const patientSchema = z.object({
     .optional()
     .or(z.literal("")),
 
+  address: z
+    .string()
+    .trim()
+    .max(120)
+    .optional()
+    .or(z.literal("")),
+
   doctor: z
     .string()
     .trim()
@@ -46,5 +53,6 @@ export interface Patient {
     last_name?: string;
     age: number;
     phone?: string | null;
+    address?: string | null;
     doctor?: string | null;
 }

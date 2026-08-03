@@ -40,6 +40,7 @@ export function PatientForm({
             last_name: "",
             age: 0,
             phone: "",
+            address: "",
             doctor: "",
         },
     });
@@ -148,6 +149,31 @@ export function PatientForm({
 
                     <FieldError>
                         {form.formState.errors.phone?.message}
+                    </FieldError>
+                </FieldContent>
+            </Field>
+
+            {/* Address */}
+            <Field>
+                <FieldLabel htmlFor="address">
+                    Address
+                </FieldLabel>
+
+                <FieldContent>
+                    <Controller
+                        control={form.control}
+                        name="address"
+                        render={({ field }) => (
+                            <Input
+                                id="address"
+                                placeholder="Enter address"
+                                {...field}
+                            />
+                        )}
+                    />
+
+                    <FieldError>
+                        {form.formState.errors.address?.message}
                     </FieldError>
                 </FieldContent>
             </Field>

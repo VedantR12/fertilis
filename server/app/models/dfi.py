@@ -23,18 +23,63 @@ class DFI(Base, TimestampMixin):
         nullable=False,
     )
 
-    dfi_percent: Mapped[float] = mapped_column(
+    volume_ml: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
 
-    hds_percent: Mapped[float] = mapped_column(
+    liquefaction_minutes: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    viscosity: Mapped[str] = mapped_column(
+        String(30),
+        nullable=False,
+    )
+
+    ph: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
 
-    method: Mapped[str] = mapped_column(
-        String(50),
+    sperm_concentration_raw: Mapped[float] = mapped_column(
+        Float,
+        nullable=False,
+    )
+
+    non_fragmented_count: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    fragmented_count: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    large_halo_count: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    medium_halo_count: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    small_halo_count: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    no_halo_count: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    degraded_count: Mapped[int] = mapped_column(
+        Integer,
         nullable=False,
     )
 

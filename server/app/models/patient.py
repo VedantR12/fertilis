@@ -40,6 +40,11 @@ class Patient(Base, TimestampMixin):
         String(15),
         nullable=True,
     )
+    
+    address: Mapped[str] = mapped_column(
+    String(120),
+    nullable=True,
+    )
 
     doctor: Mapped[str] = mapped_column(
         String(150),

@@ -31,8 +31,17 @@ class SemenAnalysisBase(BaseModel):
     immotile_percent: float = Field(ge=0, le=100)
 
 
-    morphology_normal_percent: float = Field(ge=0, le=100)
-    morphology_abnormal_percent: float = Field(ge=0, le=100)
+    morphology_normal_percent: float | None = Field(
+        default=None,
+        ge=0,
+        le=100,
+    )
+
+    morphology_abnormal_percent: float | None = Field(
+        default=None,
+        ge=0,
+        le=100,
+    )
 
 
     comments: str | None = None
@@ -81,7 +90,11 @@ class SemenAnalysisResponse(SemenAnalysisBase):
 
     @computed_field
     @property
-    def morphologically_normal_sperm_million(self) -> float:
+    def morphologically_normal_sperm_million(self) -> float | None:
+
+        if self.morphology_normal_percent is None:
+            return None
+
         return round(
             self.total_sperm_million
             * self.morphology_normal_percent

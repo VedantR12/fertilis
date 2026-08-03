@@ -98,7 +98,10 @@ interface Props {
 
 export default function PDFTable({ title, rows }: Props) {
     return (
-        <View style={styles.section}>
+        <View
+            style={styles.section}
+            wrap={false}
+        >
 
             <Text style={styles.title}>
                 {title}

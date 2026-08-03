@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Float, ForeignKey, Integer
+from sqlalchemy import Float, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base, TimestampMixin
@@ -33,7 +33,7 @@ class Morphology(Base, TimestampMixin):
         nullable=False,
     )
 
-    neck_midpiece_defects_percent: Mapped[float] = mapped_column(
+    midpiece_defects_percent: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
@@ -43,14 +43,34 @@ class Morphology(Base, TimestampMixin):
         nullable=False,
     )
 
-    excess_residual_cytoplasm_percent: Mapped[float] = mapped_column(
+    pin_heads_percent: Mapped[float] = mapped_column(
+    Float,
+    nullable=False,
+    )
+    
+    live_sperm_percent: Mapped[float] = mapped_column(
         Float,
         nullable=False,
     )
-
-    sperm_evaluated: Mapped[int] = mapped_column(
-        Integer,
+    
+    dead_sperm_percent: Mapped[float] = mapped_column(
+        Float,
         nullable=False,
+    )
+    
+    fructose: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+    
+    aggregation_agglutination: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+    )
+    
+    comments: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     sample: Mapped["Sample"] = relationship(

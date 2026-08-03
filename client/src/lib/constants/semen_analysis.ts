@@ -13,9 +13,8 @@ export const APPEARANCES = [
 ] as const;
 
 export const VISCOSITIES = [
-    "Normal",
-    "Increased",
-    "Highly Increased",
+    "Equivocal",
+    "Unequivocal",
 ] as const;
 
 export const PUS_CELLS = [

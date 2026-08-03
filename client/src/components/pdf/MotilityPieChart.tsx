@@ -6,18 +6,24 @@ import {
     StyleSheet,
 } from "@react-pdf/renderer";
 
+interface PieSlice {
+    label: string;
+    value: number;
+}
+
 interface Props {
-    rapid: number;
-    slow: number;
-    nonProgressive: number;
-    immotile: number;
+    slices: PieSlice[];
 }
 
 const COLORS = [
     "#2E7D32",
+    "#43A047",
     "#7CB342",
     "#F9A825",
+    "#FB8C00",
+    "#EF5350",
     "#C62828",
+    "#8E24AA",
 ];
 
 const styles = StyleSheet.create({
@@ -89,25 +95,8 @@ Z
 }
 
 export default function MotilityPieChart({
-    rapid,
-    slow,
-    nonProgressive,
-    immotile,
+    slices,
 }: Props) {
-
-    const values = [
-        rapid,
-        slow,
-        nonProgressive,
-        immotile,
-    ];
-
-    const labels = [
-        "Rapid Progressive",
-        "Slow Progressive",
-        "Non Progressive",
-        "Immotile",
-    ];
 
     let currentAngle = 0;
 
@@ -120,7 +109,9 @@ export default function MotilityPieChart({
                 viewBox="0 0 120 120"
             >
 
-                {values.map((value, index) => {
+                {slices.map((slice, index) => {
+
+                    const value = slice.value;
 
                     const sweep = value * 3.6;
 
@@ -136,7 +127,7 @@ export default function MotilityPieChart({
                         <Path
                             key={index}
                             d={path}
-                            fill={COLORS[index]}
+                            fill={COLORS[index % COLORS.length]}
                             stroke="#ffffff"
                             strokeWidth={1}
                         />
@@ -147,10 +138,10 @@ export default function MotilityPieChart({
 
             <View style={styles.legend}>
 
-                {labels.map((label, i) => (
+                {slices.map((slice, i) => (
 
                     <View
-                        key={label}
+                        key={slice.label}
                         style={styles.legendRow}
                     >
 
@@ -158,7 +149,7 @@ export default function MotilityPieChart({
                             style={{
                                 width: 8,
                                 height: 8,
-                                backgroundColor: COLORS[i],
+                                backgroundColor: COLORS[i % COLORS.length],
                                 marginRight: 6,
                                 borderWidth: 0.3,
                                 borderColor: "#555",
@@ -166,7 +157,7 @@ export default function MotilityPieChart({
                         />
 
                         <Text style={styles.legendText}>
-                            {label} ({values[i]}%)
+                            {slice.label} ({slice.value}%)
                         </Text>
 
                     </View>

@@ -1,84 +1,93 @@
 import { z } from "zod";
 
 export const semenAnalysisSchema = z.object({
-    sample_code: z.string(),
+  sample_code: z.string(),
 
-    // -------------------------
-    // General
-    // -------------------------
+  // -------------------------
+  // General
+  // -------------------------
 
-    criteria: z.string().min(1).max(30),
+  criteria: z.string().min(1).max(30),
 
-    // -------------------------
-    // Macroscopic Examination
-    // -------------------------
+  // -------------------------
+  // Macroscopic Examination
+  // -------------------------
 
-    volume_ml: z.coerce.number().min(0),
+  volume_ml: z.coerce.number().min(0),
 
-    appearance: z.string().min(1).max(30),
+  appearance: z.string().min(1).max(30),
 
-    ph: z.coerce.number().min(0).max(14),
+  ph: z.coerce.number().min(0).max(14),
 
-    viscosity: z.string().min(1).max(30),
+  viscosity: z.string().min(1).max(30),
 
-    liquefaction_minutes: z.coerce.number().min(0),
+  liquefaction_minutes: z.coerce.number().min(0),
 
-    // -------------------------
-    // Microscopic Examination
-    // -------------------------
+  // -------------------------
+  // Microscopic Examination
+  // -------------------------
 
-    sperm_concentration_million_ml: z.coerce.number().min(0),
+  sperm_concentration_million_ml: z.coerce.number().min(0),
 
-    wbc_concentration_million_ml: z.coerce.number().min(0),
+  wbc_concentration_million_ml: z.coerce.number().min(0),
 
-    pus_cells: z.string().min(1).max(20),
+  pus_cells: z.string().min(1).max(20),
 
-    debris: z.string().min(1).max(20),
+  debris: z.string().min(1).max(20),
 
-    agglutination: z.string().min(1).max(20),
+  agglutination: z.string().min(1).max(20),
 
-    // -------------------------
-    // Motility
-    // -------------------------
+  // -------------------------
+  // Motility
+  // -------------------------
 
-    total_motility_percent: z.coerce.number().min(0).max(100),
+  total_motility_percent: z.coerce.number().min(0).max(100),
 
-    progressive_motility_percent: z.coerce.number().min(0).max(100),
+  progressive_motility_percent: z.coerce.number().min(0).max(100),
 
-    rapid_progressive_percent: z.coerce.number().min(0).max(100),
+  rapid_progressive_percent: z.coerce.number().min(0).max(100),
 
-    slow_progressive_percent: z.coerce.number().min(0).max(100),
+  slow_progressive_percent: z.coerce.number().min(0).max(100),
 
-    non_progressive_percent: z.coerce.number().min(0).max(100),
+  non_progressive_percent: z.coerce.number().min(0).max(100),
 
-    immotile_percent: z.coerce.number().min(0).max(100),
+  immotile_percent: z.coerce.number().min(0).max(100),
 
-    // -------------------------
-    // Morphology
-    // -------------------------
+  // -------------------------
+  // Morphology
+  // -------------------------
 
-    morphology_normal_percent: z.coerce.number().min(0).max(100),
+  morphology_normal_percent: z
+    .number()
+    .min(0)
+    .max(100)
+    .optional(),
 
-    morphology_abnormal_percent: z.coerce.number().min(0).max(100),
+  morphology_abnormal_percent: z
+    .number()
+    .min(0)
+    .max(100)
+    .optional(),
 
-    // -------------------------
-    // Comments
-    // -------------------------
+  // -------------------------
+  // Comments
+  // -------------------------
 
-    comments: z.string().optional(),
-  })
+  comments: z.string().optional(),
+})
 
 
 export type SemenAnalysisFormData = z.infer<
   typeof semenAnalysisSchema
 >;
 
-export interface SemenAnalysis
-  extends SemenAnalysisFormData {
-  id: number;
-  created_at: string;
-  total_sperm_million: number;
-  total_motile_sperm_million: number;
-  progressive_motile_sperm_million: number;
-  morphologically_normal_sperm_million: number;
+export interface SemenAnalysis extends SemenAnalysisFormData {
+    id: number;
+    created_at: string;
+
+    total_sperm_million: number;
+    total_motile_sperm_million: number;
+    progressive_motile_sperm_million: number;
+
+    morphologically_normal_sperm_million: number | null;
 }

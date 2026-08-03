@@ -63,7 +63,7 @@ export default function Login() {
         <div className="flex min-h-screen items-center justify-center bg-muted/20">
             <Card className="w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle>FertiLIS Login</CardTitle>
+                    <CardTitle>Embrogen Login</CardTitle>
                 </CardHeader>
 
                 <CardContent>

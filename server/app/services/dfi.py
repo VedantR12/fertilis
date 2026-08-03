@@ -43,9 +43,21 @@ class DFIService:
 
         dfi = DFI(
             sample_id=sample.id,
-            dfi_percent=data.dfi_percent,
-            hds_percent=data.hds_percent,
-            method=data.method,
+            volume_ml=data.volume_ml,
+            liquefaction_minutes=data.liquefaction_minutes,
+            viscosity=data.viscosity,
+            ph=data.ph,
+            sperm_concentration_raw=data.sperm_concentration_raw,
+            
+            non_fragmented_count=data.non_fragmented_count,
+            fragmented_count=data.fragmented_count,
+            
+            large_halo_count=data.large_halo_count,
+            medium_halo_count=data.medium_halo_count,
+            small_halo_count=data.small_halo_count,
+            no_halo_count=data.no_halo_count,
+            degraded_count=data.degraded_count,
+            
             remarks=data.remarks,
         )
 

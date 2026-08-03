@@ -20,6 +20,7 @@ class PatientService:
             last_name=data.last_name,
             age=data.age,
             phone=data.phone,
+            address=data.address,
             doctor=data.doctor,
         )
 

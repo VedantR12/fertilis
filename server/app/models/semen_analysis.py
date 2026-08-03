@@ -128,14 +128,14 @@ class SemenAnalysis(Base, TimestampMixin):
     # Morphology
     # -------------------------
 
-    morphology_normal_percent: Mapped[float] = mapped_column(
+    morphology_normal_percent: Mapped[float | None] = mapped_column(
         Float,
-        nullable=False,
+        nullable=True,
     )
-
-    morphology_abnormal_percent: Mapped[float] = mapped_column(
+    
+    morphology_abnormal_percent: Mapped[float | None] = mapped_column(
         Float,
-        nullable=False,
+        nullable=True,
     )
 
     # -------------------------

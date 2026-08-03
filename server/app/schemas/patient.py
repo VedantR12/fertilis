@@ -9,6 +9,7 @@ class PatientCreate(BaseModel):
     last_name: Optional[str] = Field(default=None, max_length=100)
     age: int = Field(ge=0, le=120)
     phone: Optional[str] = Field(default=None, max_length=15)
+    address: Optional[str] = Field(default=None, max_length=120)
     doctor: Optional[str] = Field(default=None, max_length=150)
 
 
@@ -17,6 +18,7 @@ class PatientUpdate(BaseModel):
     last_name: Optional[str] = Field(default=None, max_length=100)
     age: Optional[int] = Field(default=None, ge=0, le=120)
     phone: Optional[str] = Field(default=None, max_length=15)
+    address: Optional[str] = Field(default=None, max_length=120)
     doctor: Optional[str] = Field(default=None, max_length=150)
 
 
@@ -27,6 +29,7 @@ class PatientResponse(BaseModel):
     last_name: Optional[str]
     age: int
     phone: Optional[str]
+    address: Optional[str]
     doctor: Optional[str]
 
     model_config = ConfigDict(from_attributes=True)

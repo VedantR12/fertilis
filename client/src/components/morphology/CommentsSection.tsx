@@ -1,0 +1,51 @@
+import type {
+    FieldErrors,
+    UseFormRegister,
+} from "react-hook-form";
+
+import type { MorphologyFormData } from "@/lib/schemas/morphology";
+
+import { Textarea } from "@/components/ui/textarea";
+
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldLegend,
+    FieldSet,
+} from "@/components/ui/field";
+
+interface Props {
+    register: UseFormRegister<MorphologyFormData>;
+    errors: FieldErrors<MorphologyFormData>;
+}
+
+export default function CommentsSection({
+    register,
+    errors,
+}: Props) {
+    return (
+        <FieldSet>
+            <FieldLegend>Comments</FieldLegend>
+
+            <FieldGroup>
+
+                <Field>
+                    <FieldLabel>Laboratory Comments</FieldLabel>
+
+                    <Textarea
+                        rows={5}
+                        placeholder="Enter observations, remarks, or additional findings..."
+                        {...register("comments")}
+                    />
+
+                    <FieldError
+                        errors={[errors.comments]}
+                    />
+                </Field>
+
+            </FieldGroup>
+        </FieldSet>
+    );
+}
