@@ -1,6 +1,5 @@
 import {
     Document,
-    Page,
     Text,
     View,
     StyleSheet,
@@ -12,6 +11,7 @@ import type { DFI } from "@/lib/schemas/dfi";
 import DFIReferenceChart from "./DFIReferenceChart";
 import PDFTable from "./PDFTable";
 import MotilityPieChart from "./MotilityPieChart";
+import PDFLayout from "./PDFLayout";
 
 interface Props {
     sample: Sample;
@@ -20,25 +20,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-    pageNumber: {
-        position: "absolute",
-        bottom: 8,
-        right: 30,
-        fontSize: 8,
-        color: "grey",
-    },
-
-    footer: {
-        position: "absolute",
-        bottom: 20,
-        left: 30,
-        right: 30,
-        borderTopWidth: 0.5,
-        borderTopColor: "#999",
-        paddingTop: 6,
-        alignItems: "center",
-    },
-
     footerTitle: {
         fontSize: 9,
         fontWeight: "bold",
@@ -54,24 +35,18 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
 
-    page: {
-        padding: 30,
-        fontSize: 10,
-        fontFamily: "Helvetica",
-    },
-
     title: {
         fontSize: 18,
         fontWeight: "bold",
         textAlign: "center",
-        marginBottom: 20,
+        marginBottom: 12,
     },
 
     sectionTitle: {
         fontSize: 13,
         fontWeight: "bold",
-        marginTop: 12,
-        marginBottom: 8,
+        marginTop: 8,
+    marginBottom: 5,
         borderBottomWidth: 1,
         paddingBottom: 4,
     },
@@ -82,7 +57,7 @@ const styles = StyleSheet.create({
 
     row: {
         flexDirection: "row",
-        marginBottom: 6,
+        marginBottom: 3,
     },
 
     label: {
@@ -92,16 +67,6 @@ const styles = StyleSheet.create({
 
     value: {
         width: "25%",
-    },
-
-    watermark: {
-        position: "absolute",
-        top: 320,
-        left: 80,
-        fontSize: 80,
-        fontWeight: "bold",
-        color: "#eeeeee",
-        transform: "rotate(-35deg)",
     },
 });
 
@@ -204,17 +169,9 @@ export default function DFIPDF({
 
         <Document>
 
-            <Page
-                size="A4"
-                style={styles.page}
-            >
+            <PDFLayout>
 
-                <Text
-                    fixed
-                    style={styles.watermark}
-                >
-                    Embrogen
-                </Text>
+             
 
                 <Text style={styles.title}>
                     DNA FRAGMENTATION INDEX REPORT
@@ -223,7 +180,7 @@ export default function DFIPDF({
                 <Text
                     style={{
                         textAlign: "right",
-                        marginBottom: 18,
+                        marginBottom: 10,
                         fontSize: 10,
                     }}
                 >
@@ -556,9 +513,9 @@ export default function DFIPDF({
                 <View
                     style={{
                         borderWidth: 1,
-                        padding: 8,
-                        marginBottom: 20,
-                        minHeight: 50,
+                        padding: 6,
+marginBottom: 12,
+                        minHeight: 20,
                     }}
                 >
                     <Text>
@@ -568,60 +525,49 @@ export default function DFIPDF({
 
                 <View
                     style={{
-                        marginTop: 35,
+                        marginTop: 10,
                         alignItems: "flex-end",
                     }}
                 >
-
-                    <Text
+                    <View
                         style={{
-                            fontWeight: "bold",
-                            marginBottom: 5,
-                        }}
-                    >
-                        Tested By
-                    </Text>
-
-                    <Text
-                        style={{
-                            borderTopWidth: 1,
-                            paddingTop: 4,
-                            width: 120,
+                            width: 180,
                             textAlign: "center",
                         }}
                     >
-                        Signature
-                    </Text>
+                        <View
+                            style={{
+                                height: 35,
+                            }}
+                        />
 
+                        <View
+                            style={{
+                                borderTopWidth: 1,
+                                paddingTop: 5,
+                            }}
+                        >
+                            <Text>Tested By</Text>
+
+                            <Text
+                                style={{
+                                    marginTop: 8,
+                                }}
+                            >__________________
+                            </Text>
+
+                            <Text
+                                style={{
+                                    marginTop: 8,
+                                }}
+                            >
+                                Signature
+                            </Text>
+                        </View>
+                    </View>
                 </View>
 
-                <View
-                    fixed
-                    style={styles.footer}
-                >
-
-                    <Text style={styles.footerTitle}>
-                        Embrogen
-                    </Text>
-
-                    <Text style={styles.footerText}>
-                        Advanced Fertility & Andrology Laboratory
-                    </Text>
-
-                    <Text style={styles.footerText}>
-                        Phone: +91 XXXXX XXXXX | Email: info@embrogen.com
-                    </Text>
-
-                </View>
-                <Text
-                    style={styles.pageNumber}
-                    fixed
-                    render={({ pageNumber, totalPages }) =>
-                        `Page ${pageNumber} of ${totalPages}`
-                    }
-                />
-
-            </Page>
+            </PDFLayout>
 
         </Document>
 

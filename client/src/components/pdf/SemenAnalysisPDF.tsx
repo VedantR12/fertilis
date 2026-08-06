@@ -1,11 +1,10 @@
 import {
     Document,
-    Page,
     Text,
     View,
     StyleSheet,
 } from "@react-pdf/renderer";
-
+import PDFLayout from "./PDFLayout";
 import type { Sample } from "@/lib/schemas/sample";
 import type { Patient } from "@/lib/schemas/patient";
 import type { SemenAnalysis } from "@/lib/schemas/semen_analysis";
@@ -19,27 +18,6 @@ interface Props {
 }
 
 const styles = StyleSheet.create({
-    pageNumber: {
-        position: "absolute",
-        bottom: 8,
-        right: 30,
-        fontSize: 8,
-        color: "grey",
-    },
-
-    footer: {
-        position: "absolute",
-        bottom: 20,
-        left: 30,
-        right: 30,
-
-        borderTopWidth: 0.5,
-        borderTopColor: "#999",
-
-        paddingTop: 6,
-
-        alignItems: "center",
-    },
 
     footerTitle: {
         fontSize: 9,
@@ -53,27 +31,21 @@ const styles = StyleSheet.create({
     },
 
     tableSpacing: {
-        marginBottom: 16,
-    },
-
-    page: {
-        padding: 30,
-        fontSize: 10,
-        fontFamily: "Helvetica",
+        marginBottom: 10,
     },
 
     title: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: "bold",
         textAlign: "center",
-        marginBottom: 20,
+        marginBottom: 12,
     },
 
     sectionTitle: {
         fontSize: 13,
         fontWeight: "bold",
-        marginTop: 12,
-        marginBottom: 8,
+        marginTop: 8,
+    marginBottom: 5,
         borderBottomWidth: 1,
         paddingBottom: 4,
     },
@@ -84,7 +56,7 @@ const styles = StyleSheet.create({
 
     row: {
         flexDirection: "row",
-        marginBottom: 6,
+        marginBottom: 3,
     },
 
     label: {
@@ -95,21 +67,22 @@ const styles = StyleSheet.create({
     value: {
         width: "25%",
     },
+
     cardsContainer: {
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between",
         marginTop: 6,
-        marginBottom: 18,
+        marginBottom: 10,
     },
 
     card: {
         width: "48%",
         borderWidth: 1,
         borderColor: "#000",
-        paddingVertical: 8,
+        paddingVertical: 5,
         paddingHorizontal: 10,
-        marginBottom: 8,
+        marginBottom: 5,
     },
 
     cardTitle: {
@@ -131,18 +104,6 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
 
-    watermark: {
-        position: "absolute",
-        top: 320,
-        left: 80,
-
-        fontSize: 80,
-        fontWeight: "bold",
-
-        color: "#eeeeee",
-
-        transform: "rotate(-35deg)",
-    },
 });
 
 export default function SemenAnalysisPDF({
@@ -159,15 +120,7 @@ export default function SemenAnalysisPDF({
 
     return (
         <Document>
-            <Page size="A4" style={styles.page}>
-
-                <Text
-                    fixed
-                    style={styles.watermark}
-                >
-                    Embrogen
-                </Text>
-
+            <PDFLayout>
 
                 <Text style={styles.title}>
                     SEMEN ANALYSIS REPORT
@@ -176,7 +129,7 @@ export default function SemenAnalysisPDF({
                 <Text
                     style={{
                         textAlign: "right",
-                        marginBottom: 18,
+                        marginBottom: 8,
                         fontSize: 10,
                     }}
                 >
@@ -383,7 +336,7 @@ export default function SemenAnalysisPDF({
                     style={{
                         flexDirection: "row",
                         alignItems: "stretch",
-                        marginBottom: 18,
+                        marginBottom: 10,
                     }}
                 >
 
@@ -545,8 +498,8 @@ export default function SemenAnalysisPDF({
                 <View
                     style={{
                         borderWidth: 1,
-                        padding: 8,
-                        marginBottom: 20,
+                        padding: 6,
+                        marginBottom: 12,
                     }}
                 >
                     <Text>
@@ -556,7 +509,7 @@ export default function SemenAnalysisPDF({
 
                 <View
                     style={{
-                        marginTop: 40,
+                        marginTop: 20,
                         alignItems: "flex-end",
                     }}
                 >
@@ -568,7 +521,7 @@ export default function SemenAnalysisPDF({
                     >
                         <View
                             style={{
-                                height: 60,
+                                height: 35,
                             }}
                         />
 
@@ -582,10 +535,9 @@ export default function SemenAnalysisPDF({
 
                             <Text
                                 style={{
-                                    marginTop: 15,
+                                    marginTop: 8,
                                 }}
-                            >
-                                Name: __________________
+                            >__________________
                             </Text>
 
                             <Text
@@ -598,32 +550,8 @@ export default function SemenAnalysisPDF({
                         </View>
                     </View>
                 </View>
-                <View
-                    fixed
-                    style={styles.footer}
-                >
 
-                    <Text style={styles.footerTitle}>
-                        Embrogen
-                    </Text>
-
-                    <Text style={styles.footerText}>
-                        Advanced Fertility & Andrology Laboratory
-                    </Text>
-
-                    <Text style={styles.footerText}>
-                        Phone: +91 XXXXX XXXXX | Email: info@embrogen.com
-                    </Text>
-
-                </View>
-                <Text
-                    style={styles.pageNumber}
-                    fixed
-                    render={({ pageNumber, totalPages }) =>
-                        `Page ${pageNumber} of ${totalPages}`
-                    }
-                />
-            </Page>
+            </PDFLayout>
         </Document>
     );
 }

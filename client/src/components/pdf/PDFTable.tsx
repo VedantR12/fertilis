@@ -2,13 +2,13 @@ import { Text, View, StyleSheet } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
     section: {
-        marginBottom: 14,
+        marginBottom: 8,
     },
 
     title: {
-        fontSize: 12,
+        fontSize: 11,
+        marginBottom: 4,
         fontWeight: "bold",
-        marginBottom: 6,
     },
 
     header: {
@@ -27,58 +27,66 @@ const styles = StyleSheet.create({
 
     parameterCell: {
         width: "40%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
     },
 
     resultCell: {
         width: "20%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         textAlign: "center",
     },
 
     unitCell: {
         width: "15%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         textAlign: "center",
     },
 
     referenceCell: {
         width: "25%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         textAlign: "center",
     },
 
     parameterHeader: {
         width: "40%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         fontWeight: "bold",
     },
 
     resultHeader: {
         width: "20%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         fontWeight: "bold",
         textAlign: "center",
     },
 
     unitHeader: {
         width: "15%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         fontWeight: "bold",
         textAlign: "center",
     },
 
     referenceHeader: {
         width: "25%",
-        padding: 5,
-        fontSize: 10,
+        paddingVertical: 3,
+        paddingHorizontal: 5,
+        fontSize: 9,
         fontWeight: "bold",
         textAlign: "center",
     },
