@@ -88,7 +88,7 @@ export default function MorphologyPDF({
             <PDFLayout>
 
                 <Text style={styles.title}>
-                    SPERM MORPHOLOGY REPORT
+                    MORPHOLOGY REPORT
                 </Text>
 
                 <Text
@@ -415,7 +415,7 @@ export default function MorphologyPDF({
 
                 <View
                     style={{
-                        marginTop: 20,
+                        marginTop: 150,
                         alignItems: "flex-end",
                     }}
                 >

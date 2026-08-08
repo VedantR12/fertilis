@@ -119,6 +119,7 @@ export default function PDFTable({ title, rows }: Props) {
                 <Text style={styles.parameterHeader}>Parameter</Text>
                 <Text style={styles.resultHeader}>Result</Text>
                 <Text style={styles.unitHeader}>Unit</Text>
+                <Text style={styles.referenceHeader}>Ref. Value</Text>
             </View>
 
             {rows.map((row) => (

@@ -509,7 +509,7 @@ export default function SemenAnalysisPDF({
 
                 <View
                     style={{
-                        marginTop: 20,
+                        marginTop: 5,
                         alignItems: "flex-end",
                     }}
                 >

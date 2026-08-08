@@ -372,7 +372,8 @@ export default function DFIPDF({
                     <View
                         style={{
                             flex: 1,
-                            paddingRight: 15,
+                            paddingRight: 10,
+                            minWidth: 0,
                         }}
                     >
 
@@ -381,14 +382,14 @@ export default function DFIPDF({
                             rows={[
                                 {
                                     parameter: "Non Fragmented",
-                                    result: `${dfi.non_fragmented_count} (${nonFragmentedPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${nonFragmentedPercent}%`,
+                                    unit: "%",
                                     reference: ">70%",
                                 },
                                 {
                                     parameter: "Fragmented",
-                                    result: `${dfi.fragmented_count} (${fragmentedPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${fragmentedPercent}%`,
+                                    unit: "%",
                                     reference: "<30%",
                                 },
                                 {
@@ -404,11 +405,13 @@ export default function DFIPDF({
 
                     <View
                         style={{
-                            flex: 1,
+                            width: 170,
                             alignItems: "center",
                             justifyContent: "center",
+                            flexShrink: 0,
                         }}
                     >
+
 
                         <MotilityPieChart
                             slices={[
@@ -456,28 +459,28 @@ export default function DFIPDF({
                             rows={[
                                 {
                                     parameter: "Large Halo",
-                                    result: `${dfi.large_halo_count} (${largeHaloPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${largeHaloPercent}%`,
+                                    unit: "%",
                                 },
                                 {
                                     parameter: "Medium Halo",
-                                    result: `${dfi.medium_halo_count} (${mediumHaloPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${mediumHaloPercent}%`,
+                                    unit: "%",
                                 },
                                 {
                                     parameter: "Small Halo",
-                                    result: `${dfi.small_halo_count} (${smallHaloPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${smallHaloPercent}%`,
+                                    unit: "%",
                                 },
                                 {
                                     parameter: "No Halo",
-                                    result: `${dfi.no_halo_count} (${noHaloPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${noHaloPercent}%`,
+                                    unit: "%",
                                 },
                                 {
                                     parameter: "Degraded",
-                                    result: `${dfi.degraded_count} (${degradedPercent}%)`,
-                                    unit: "Count (%)",
+                                    result: `${degradedPercent}%`,
+                                    unit: "%",
                                 },
                                 {
                                     parameter: "Total Cells Counted",
@@ -492,9 +495,10 @@ export default function DFIPDF({
 
                     <View
                         style={{
-                            flex: 1,
+                            width: 170,
                             alignItems: "center",
                             justifyContent: "center",
+                            flexShrink: 0,
                         }}
                     >
 
@@ -544,9 +548,29 @@ export default function DFIPDF({
                     </Text>
                 </View>
 
+
+
+            </PDFLayout>
+            <PDFLayout>
+
+                <Text style={styles.referenceTitle}>
+                    Representative Halo Classification
+                </Text>
+
+                <Image
+                    src={haloReference}
+                    style={styles.referenceImage}
+                />
+
+                <Text style={styles.referenceCaption}>
+                    Figure 1. Representative sperm showing Large Halo,
+                    Medium Halo, Small Halo, No Halo and Degraded
+                    morphology.
+                </Text>
+
                 <View
                     style={{
-                        marginTop: 10,
+                        marginTop: 250,
                         alignItems: "flex-end",
                     }}
                 >
@@ -587,25 +611,6 @@ export default function DFIPDF({
                         </View>
                     </View>
                 </View>
-
-            </PDFLayout>
-            <PDFLayout>
-
-                <Text style={styles.referenceTitle}>
-                    Representative Halo Classification
-                </Text>
-
-                <Image
-                    src={haloReference}
-                    style={styles.referenceImage}
-                />
-
-                <Text style={styles.referenceCaption}>
-                    Figure 1. Representative sperm showing Large Halo,
-                    Medium Halo, Small Halo, No Halo and Degraded
-                    morphology.
-                </Text>
-
             </PDFLayout>
 
         </Document>
