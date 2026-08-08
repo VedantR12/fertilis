@@ -10,6 +10,7 @@ import { getPatients } from "@/services/patient";
 import type { Patient } from "@/types/patient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Users } from "lucide-react";
 
 export default function Patients() {
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -68,12 +69,12 @@ export default function Patients() {
     }, [search, page]);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
 
             {/* Page Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">
+                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-800">
                         {isSelectionMode
                             ? "Select Patient"
                             : isReportsMode
@@ -81,7 +82,7 @@ export default function Patients() {
                                 : "Patients"}
                     </h1>
 
-                    <p className="text-muted-foreground">
+                    <p className="mt-2 text-base text-slate-500">
                         {isSelectionMode
                             ? "Choose an existing patient or register a new patient to continue."
                             : isReportsMode
@@ -91,7 +92,10 @@ export default function Patients() {
                 </div>
 
                 {!isReportsMode && (
-                    <Button >
+                    <Button
+                        size="lg"
+                        className="min-w-[170px]"
+                    >
                         <Link
                             to={
                                 isSelectionMode
@@ -106,12 +110,12 @@ export default function Patients() {
             </div>
 
             {/* Search */}
-            <div className="relative max-w-sm">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <div className="relative w-full max-w-md">
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
 
                 <Input
                     placeholder="Search patients..."
-                    className="pl-9"
+                    className="pl-12"
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
@@ -121,23 +125,23 @@ export default function Patients() {
             </div>
 
             {/* Table Placeholder */}
-            <div className="rounded-lg border bg-white">
+            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
 
                 <table className="w-full">
 
-                    <thead className="border-b bg-gray-50">
+                    <thead className="border-b border-slate-200 bg-slate-50">
 
                         <tr>
 
-                            <th className="px-4 py-3 text-left">Patient Code</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Patient Code</th>
 
-                            <th className="px-4 py-3 text-left">Name</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Name</th>
 
-                            <th className="px-4 py-3 text-left">Age</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Age</th>
 
-                            <th className="px-4 py-3 text-left">Phone</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Phone</th>
 
-                            <th className="px-4 py-3 text-left">Actions</th>
+                            <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Actions</th>
 
                         </tr>
 
@@ -155,12 +159,19 @@ export default function Patients() {
                             </tr>
                         ) : patients.length === 0 ? (
                             <tr>
-                                <td
-                                    colSpan={5}
-                                    className="py-12 text-center text-gray-500"
-                                >
-                                    No patients found.
-                                </td>
+                                <div className="flex flex-col items-center gap-2 py-6">
+
+                                    <Users className="h-10 w-10 text-slate-300" />
+
+                                    <p className="font-medium text-slate-600">
+                                        No patients found
+                                    </p>
+
+                                    <p className="text-sm text-slate-400">
+                                        Try a different search or register a new patient.
+                                    </p>
+
+                                </div>
                             </tr>
                         ) : (
                             patients.map((patient) => (
@@ -189,27 +200,27 @@ export default function Patients() {
                                         }
 
                                     }}
-                                    className="border-b hover:bg-gray-50 cursor-pointer"
+                                    className="cursor-pointer border-b border-slate-100 transition-all duration-200 hover:bg-blue-50/40"
                                 >
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         {patient.patient_code}
                                     </td>
 
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         {patient.first_name} {patient.last_name}
                                     </td>
 
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         {patient.age}
                                     </td>
 
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         {patient.phone}
                                     </td>
 
-                                    <td className="px-4 py-3">
+                                    <td className="px-6 py-4">
                                         <Button
-                                            variant="outline"
+                                            variant="default"
                                             size="sm"
                                             onClick={(e) => {
 

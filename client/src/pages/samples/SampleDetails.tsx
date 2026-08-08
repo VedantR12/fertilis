@@ -55,9 +55,17 @@ export default function SampleDetails() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold">
-                Sample Details
-            </h1>
+            <div>
+
+                <h1 className="text-4xl font-extrabold tracking-tight text-slate-800">
+                    Sample {sample.sample_code}
+                </h1>
+
+                <p className="mt-2 text-base text-slate-500">
+                    View sample information and perform laboratory tests.
+                </p>
+
+            </div>
 
             <Card>
 
@@ -79,16 +87,16 @@ export default function SampleDetails() {
 
                         <div
                             key={test.id}
-                            className="flex items-center justify-between rounded-lg border p-4"
+                            className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#6C2E87] p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
                         >
 
                             <div>
 
-                                <h3 className="font-medium">
+                                <h3 className="font-medium text-white">
                                     {test.name}
                                 </h3>
 
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-muted-foreground text-slate-300">
 
                                     {test.performed
                                         ? "Completed"

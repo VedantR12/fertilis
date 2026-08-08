@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import logo from "@/assets/logo.jpeg";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,11 +48,11 @@ export default function Login() {
 
             setAuth(token.access_token, user);
 
-            toast.success("Login successful");
+            toast.success("Welcome to Embrogen");
 
             navigate("/admin");
         } catch (error) {
-            toast.error("Invalid username or password");
+            toast.error("Incorrect username or password.");
             console.error(error);
         } finally {
             setLoading(false);
@@ -60,16 +60,38 @@ export default function Login() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-muted/20">
-            <Card className="w-full max-w-sm">
-                <CardHeader>
-                    <CardTitle>Embrogen Login</CardTitle>
-                </CardHeader>
+        <div className="flex min-h-screen items-center justify-center bg-[#F6F8FB] px-6">
+            <Card className="w-full max-w-md border border-slate-200 shadow-xl">
+                <CardHeader className="pb-2 text-center">
+
+    <div className="mb-6 flex justify-center">
+
+    <img
+        src={logo}
+        alt="Embrogen Logo"
+        className="h-24 w-24 rounded-3xl object-contain"
+    />
+
+</div>
+
+    <CardTitle className="text-3xl">
+
+        EMBROGEN
+
+    </CardTitle>
+
+    <p className="mt-2 text-sm text-slate-500">
+
+        Embryological Services
+
+    </p>
+
+</CardHeader>
 
                 <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
-                            <Label>Username</Label>
+                            <Label className="mb-2 block font-medium text-slate-700">Username</Label>
 
                             <Input
                                 {...register("username")}
@@ -84,7 +106,7 @@ export default function Login() {
                         </div>
 
                         <div>
-                            <Label>Password</Label>
+                            <Label className="mb-2 block font-medium text-slate-700">Password</Label>
 
                             <Input
                                 type="password"
@@ -100,8 +122,9 @@ export default function Login() {
                         </div>
 
                         <Button
-                            type="submit"
-                            className="w-full"
+    type="submit"
+    size="lg"
+    className="mt-3 w-full"
                             disabled={loading}
                         >
                             {loading ? "Signing In..." : "Login"}

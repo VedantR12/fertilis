@@ -11,6 +11,7 @@ import type { Morphology } from "@/lib/schemas/morphology";
 import PDFLayout from "./PDFLayout";
 import PDFTable from "./PDFTable";
 import MotilityPieChart from "./MotilityPieChart";
+import BarChart from "./BarChart";
 
 interface Props {
     sample: Sample;
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: "bold",
         marginTop: 8,
-    marginBottom: 5,
+        marginBottom: 5,
         borderBottomWidth: 1,
         paddingBottom: 4,
     },
@@ -237,7 +238,7 @@ export default function MorphologyPDF({
                 >
                     <View
                         style={{
-                            width: "65%",
+                            width: "100%",
                             paddingRight: 6,
                         }}
                     >
@@ -278,41 +279,44 @@ export default function MorphologyPDF({
                             ]}
                         />
                     </View>
-                    <View
-                        style={{
-                            width: "35%",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            paddingLeft: 10,
-                        }}
-                    >
-                        <MotilityPieChart
-                            slices={[
-                                {
-                                    label: "Normal Forms",
-                                    value: morphology.normal_forms_percent,
-                                },
-                                {
-                                    label: "Head Defects",
-                                    value: morphology.head_defects_percent,
-                                },
-                                {
-                                    label: "Midpiece Defects",
-                                    value: morphology.midpiece_defects_percent,
-                                },
-                                {
-                                    label: "Tail Defects",
-                                    value: morphology.tail_defects_percent,
-                                },
-                                {
-                                    label: "Pin Heads",
-                                    value: morphology.pin_heads_percent,
-                                },
-                            ]}
-                        />
-                    </View>
-
                 </View>
+                <View
+                    style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        paddingLeft: 10,
+                    }}
+                >
+                    <Text style={styles.sectionTitle}>
+                        Morphology Bar Chart
+                    </Text>
+                    <BarChart
+                        data={[
+                            {
+                                label: "Normal",
+                                value: morphology.normal_forms_percent,
+                            },
+                            {
+                                label: "Head",
+                                value: morphology.head_defects_percent,
+                            },
+                            {
+                                label: "Mid",
+                                value: morphology.midpiece_defects_percent,
+                            },
+                            {
+                                label: "Tail",
+                                value: morphology.tail_defects_percent,
+                            },
+                            {
+                                label: "Pin",
+                                value: morphology.pin_heads_percent,
+                            },
+                        ]}
+                    />
+                </View>
+
+
 
                 <View
                     wrap={false}
@@ -397,8 +401,8 @@ export default function MorphologyPDF({
                 <View
                     style={{
                         borderWidth: 1,
-                       padding: 6,
-marginBottom: 12,
+                        padding: 6,
+                        marginBottom: 12,
                     }}
                 >
 

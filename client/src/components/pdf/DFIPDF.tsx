@@ -2,6 +2,7 @@ import {
     Document,
     Text,
     View,
+    Image,
     StyleSheet,
 } from "@react-pdf/renderer";
 
@@ -12,6 +13,7 @@ import DFIReferenceChart from "./DFIReferenceChart";
 import PDFTable from "./PDFTable";
 import MotilityPieChart from "./MotilityPieChart";
 import PDFLayout from "./PDFLayout";
+import haloReference from "@/assets/dfi.png";
 
 interface Props {
     sample: Sample;
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: "bold",
         marginTop: 8,
-    marginBottom: 5,
+        marginBottom: 5,
         borderBottomWidth: 1,
         paddingBottom: 4,
     },
@@ -67,6 +69,25 @@ const styles = StyleSheet.create({
 
     value: {
         width: "25%",
+    },
+    referenceTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 18,
+    },
+
+    referenceImage: {
+        width: 250,
+        height: "auto",
+        alignSelf: "center",
+    },
+
+    referenceCaption: {
+        marginTop: 12,
+        fontSize: 9,
+        color: "#555",
+        textAlign: "center",
     },
 });
 
@@ -171,7 +192,7 @@ export default function DFIPDF({
 
             <PDFLayout>
 
-             
+
 
                 <Text style={styles.title}>
                     DNA FRAGMENTATION INDEX REPORT
@@ -514,7 +535,7 @@ export default function DFIPDF({
                     style={{
                         borderWidth: 1,
                         padding: 6,
-marginBottom: 12,
+                        marginBottom: 12,
                         minHeight: 20,
                     }}
                 >
@@ -566,6 +587,24 @@ marginBottom: 12,
                         </View>
                     </View>
                 </View>
+
+            </PDFLayout>
+            <PDFLayout>
+
+                <Text style={styles.referenceTitle}>
+                    Representative Halo Classification
+                </Text>
+
+                <Image
+                    src={haloReference}
+                    style={styles.referenceImage}
+                />
+
+                <Text style={styles.referenceCaption}>
+                    Figure 1. Representative sperm showing Large Halo,
+                    Medium Halo, Small Halo, No Halo and Degraded
+                    morphology.
+                </Text>
 
             </PDFLayout>
 

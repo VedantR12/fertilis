@@ -16,13 +16,13 @@ interface Props {
 }
 
 const COLORS = [
-    "#2E7D32",
-    "#43A047",
-    "#7CB342",
-    "#F9A825",
-    "#FB8C00",
-    "#EF5350",
+    "#F67419",
     "#C62828",
+    "#08B5D3",
+    "#FB8C00",
+    "#EE4646",
+    "#EF5350",
+    "#0689ee",
     "#8E24AA",
 ];
 
@@ -73,25 +73,29 @@ function polarToCartesian(
     };
 }
 
-function describeArc(
+function describeDonutArc(
     cx: number,
     cy: number,
-    r: number,
+    outerRadius: number,
+    innerRadius: number,
     startAngle: number,
     endAngle: number
 ) {
-    const start = polarToCartesian(cx, cy, r, endAngle);
-    const end = polarToCartesian(cx, cy, r, startAngle);
+    const outerStart = polarToCartesian(cx, cy, outerRadius, endAngle);
+    const outerEnd = polarToCartesian(cx, cy, outerRadius, startAngle);
 
-    const largeArc =
-        endAngle - startAngle <= 180 ? 0 : 1;
+    const innerStart = polarToCartesian(cx, cy, innerRadius, startAngle);
+    const innerEnd = polarToCartesian(cx, cy, innerRadius, endAngle);
+
+    const largeArc = endAngle - startAngle <= 180 ? 0 : 1;
 
     return `
-M ${cx} ${cy}
-L ${start.x} ${start.y}
-A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y}
-Z
-`;
+        M ${outerStart.x} ${outerStart.y}
+        A ${outerRadius} ${outerRadius} 0 ${largeArc} 0 ${outerEnd.x} ${outerEnd.y}
+        L ${innerStart.x} ${innerStart.y}
+        A ${innerRadius} ${innerRadius} 0 ${largeArc} 1 ${innerEnd.x} ${innerEnd.y}
+        Z
+    `;
 }
 
 export default function MotilityPieChart({
@@ -104,35 +108,52 @@ export default function MotilityPieChart({
         <View style={styles.container} wrap={false}>
 
             <Svg
-                width={120}
-                height={120}
-                viewBox="0 0 120 120"
+                width={170}
+                height={170}
+                viewBox="0 0 170 170"
             >
 
                 {slices.map((slice, index) => {
 
                     const value = slice.value;
 
-                    const sweep = value * 3.6;
+                    const gap = 2;
 
-                    const path = describeArc(
-                        60, 60, 45,
+                    const sweep = Math.max(
+                        value * 3.6 - gap,
+                        0
+                    );
+
+                    const path = describeDonutArc(
+                        85,
+                        85,
+                        65,
+                        35,
                         currentAngle,
                         currentAngle + sweep
                     );
 
-                    currentAngle += sweep;
+                    currentAngle += sweep + gap;
 
                     return (
                         <Path
                             key={index}
                             d={path}
                             fill={COLORS[index % COLORS.length]}
-                            stroke="#ffffff"
+                            stroke="#F3F4F6"
                             strokeWidth={1}
                         />
                     );
                 })}
+
+                <Path
+    d="
+        M 85 50
+        A 35 35 0 1 1 84.9 50
+        Z
+    "
+    fill="#ffffff"
+/>
 
             </Svg>
 

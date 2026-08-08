@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: "bold",
         marginTop: 8,
-    marginBottom: 5,
+        marginBottom: 5,
         borderBottomWidth: 1,
         paddingBottom: 4,
     },
@@ -117,6 +117,9 @@ export default function SemenAnalysisPDF({
         month: "short",
         year: "numeric",
     }).format(new Date(analysis.created_at));
+    const hasMorphology =
+        analysis.morphology_normal_percent !== 0 &&
+        analysis.morphology_abnormal_percent !== 0;
 
     return (
         <Document>
@@ -417,29 +420,25 @@ export default function SemenAnalysisPDF({
                     </View>
                 </View>
 
-                <PDFTable
-                    title="Morphology"
-                    rows={[
-                        {
-                            parameter: "Normal Forms",
-                            result: analysis.morphology_normal_percent == null
-                                ? "N/A"
-                                : `${analysis.morphology_normal_percent}%`,
-                            unit: "%",
-                            reference: ">= 4",
-                        },
-                        {
-
-                            parameter: "Abnormal Forms",
-                            result: analysis.morphology_abnormal_percent == null
-                                ? "N/A"
-                                : `${analysis.morphology_abnormal_percent}%`,
-                            unit: "%",
-                            reference: "< 96",
-                        },
-                    ]}
-                />
-
+                {hasMorphology && (
+                    <PDFTable
+                        title="Morphology"
+                        rows={[
+                            {
+                                parameter: "Normal Forms",
+                                result: `${analysis.morphology_normal_percent}%`,
+                                unit: "%",
+                                reference: ">= 4",
+                            },
+                            {
+                                parameter: "Abnormal Forms",
+                                result: `${analysis.morphology_abnormal_percent}%`,
+                                unit: "%",
+                                reference: "< 96",
+                            },
+                        ]}
+                    />
+                )}
                 <Text style={styles.sectionTitle}>
                     Totals per Ejaculate
                 </Text>
@@ -476,18 +475,19 @@ export default function SemenAnalysisPDF({
                             {analysis.progressive_motile_sperm_million} Million
                         </Text>
                     </View>
+                    {hasMorphology && (
+                        <View style={styles.card}>
+                            <Text style={styles.cardTitle}>
+                                Morph. Normal Sperm
+                            </Text>
 
-                    <View style={styles.card}>
-                        <Text style={styles.cardTitle}>
-                            Morph. Normal Sperm
-                        </Text>
-
-                        <Text style={styles.cardValue}>
-                            {analysis.morphologically_normal_sperm_million == null
-                                ? "N/A"
-                                : analysis.morphologically_normal_sperm_million.toFixed(2)} Million
-                        </Text>
-                    </View>
+                            <Text style={styles.cardValue}>
+                                {analysis.morphologically_normal_sperm_million == null
+                                    ? "N/A"
+                                    : analysis.morphologically_normal_sperm_million.toFixed(2)} Million
+                            </Text>
+                        </View>
+                    )}
 
                 </View>
 

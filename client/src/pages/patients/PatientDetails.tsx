@@ -65,10 +65,10 @@ export default function PatientDetails() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-bold">
+                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-800">
                         {isSelectionMode
                             ? "Select Sample"
                             : isReportsMode
@@ -76,17 +76,18 @@ export default function PatientDetails() {
                                 : `${patient.first_name} ${patient.last_name}`}
                     </h1>
 
-                    <p className="text-muted-foreground">
+                    <p className="mt-2 text-base text-slate-500">
                         {patient.patient_code}
                     </p>
                 </div>
 
                 {!isReportsMode && (
 
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-3">
 
                         <Button
                             variant="outline"
+                            size="lg"
                             onClick={() =>
                                 navigate(`/admin/patients/${patient.patient_code}/edit`)
                             }
@@ -95,6 +96,8 @@ export default function PatientDetails() {
                         </Button>
 
                         <Button
+                            size="lg"
+                            className="min-w-[190px]"
                             onClick={() =>
                                 navigate(
                                     isSelectionMode
@@ -111,21 +114,44 @@ export default function PatientDetails() {
                 )}
             </div>
 
-            <div className="rounded-lg border p-6 space-y-2">
-                <p>
-                    <strong>Age:</strong> {patient.age}
-                </p>
+            <div className="grid grid-cols-2 gap-6 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+                <div>
 
-                <p>
-                    <strong>Phone:</strong> {patient.phone || "-"}
-                </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        Age
+                    </p>
 
-                <p>
-                    <strong>Doctor:</strong> {patient.doctor || "-"}
-                </p>
+                    <p className="mt-1 text-lg font-semibold text-slate-800">
+                        {patient.age} Years
+                    </p>
+
+                </div>
+
+                <div>
+
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        Phone
+                    </p>
+
+                    <p className="mt-1 text-lg font-semibold text-slate-800">
+                        {patient.phone || "-"}
+                    </p>
+
+                </div>
+                <div>
+
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                        Doctor
+                    </p>
+
+                    <p className="mt-1 text-lg font-semibold text-slate-800">
+                        {patient.doctor || "-"}
+                    </p>
+
+                </div>
             </div>
             <div className="space-y-4">
-                <h2 className="text-2xl font-semibold">
+                <h2 className="text-2xl font-bold text-slate-800">
                     {isSelectionMode
                         ? "Select Sample"
                         : isReportsMode
@@ -151,7 +177,17 @@ export default function PatientDetails() {
                                         colSpan={4}
                                         className="text-center text-muted-foreground"
                                     >
-                                        No samples registered.
+                                        <div className="flex flex-col items-center gap-3 py-10">
+
+                                            <p className="text-lg font-semibold text-slate-600">
+                                                No Samples Registered
+                                            </p>
+
+                                            <p className="text-sm text-slate-400">
+                                                Register the patient's first sample.
+                                            </p>
+
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -206,13 +242,30 @@ export default function PatientDetails() {
                                         </TableCell>
 
                                         <TableCell>
-                                            {new Date(
-                                                sample.collection_datetime
-                                            ).toLocaleString()}
+                                            {new Intl.DateTimeFormat("en-GB", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            }).format(new Date(sample.collection_datetime))}
                                         </TableCell>
 
                                         <TableCell>
-                                            {sample.status}
+
+                                            <span
+                                                className={`rounded-full px-3 py-1 text-xs font-semibold ${sample.status === "Completed"
+                                                        ? "bg-green-100 text-green-700"
+                                                        : sample.status === "Collected"
+                                                            ? "bg-blue-100 text-blue-700"
+                                                            : sample.status === "Pending"
+                                                                ? "bg-yellow-100 text-yellow-700"
+                                                                : "bg-slate-100 text-slate-700"
+                                                    }`}
+                                            >
+                                                {sample.status}
+                                            </span>
+
                                         </TableCell>
                                     </TableRow>
                                 ))
